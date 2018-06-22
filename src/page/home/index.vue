@@ -15,7 +15,7 @@
             </div>
         </div>
         <!-- 展开搜索栏 -->
-        <div class="search-mask" :class="{ 'show' : searchBoxShow }">
+        <div class="search-mask" v-if="searchBoxShow">
             <div class="mask-head flex">
                 <div class="mask-close" @click="searchShow(1)">
                     <van-icon name="arrow-left" />
@@ -23,7 +23,7 @@
                 <div class="mask-search">
                     <div class="search-main flex">
                         <van-icon name="search" />
-                        <input type="text" class="search-input" v-focus="searchFocus" placeholder="搜索您想要的内容">
+                        <input type="text" class="search-input" v-focus placeholder="搜索您想要的内容">
                     </div>
                 </div>
                 <div class="search-btn" @click="shopSearch()">搜索</div>
@@ -182,6 +182,15 @@ export default {
     components: {
         'shop-footer': shopFooter
     },
+    directives: {
+        focus: {
+            // 指令的定义
+            inserted: function (el,binding) {
+            el.focus()
+            }
+        }
+    },
+
     data(){
         return{
             searchValue: '',    //顶部搜索栏Value
@@ -196,11 +205,11 @@ export default {
         }
     },
     mounted(){
-        this.getBanner()
-        this.getNavItem()
-        this.getNewList()
-        this.getIndexOffer()
-        this.getIndexNew()
+        // this.getBanner()
+        // this.getNavItem()
+        // this.getNewList()
+        // this.getIndexOffer()
+        // this.getIndexNew()
     },
     directives: {
         // 自定义获取焦点
@@ -214,6 +223,7 @@ export default {
     methods:{
         // 搜索显示
         searchShow(num){
+            console.log(num)
             if(num == 0){
                 this.searchBoxShow = true
                 this.searchFocus = true
@@ -336,7 +346,6 @@ export default {
         }
     }
     .search-mask{
-        display: none;
         position: fixed;
         top: 0px;
         left: 0px;
