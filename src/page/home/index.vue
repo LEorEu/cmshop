@@ -15,7 +15,7 @@
             </div>
         </div>
         <!-- 展开搜索栏 -->
-        <div class="search-mask" :class="{ 'show' : searchBoxShow }">
+        <div class="search-mask" v-if="searchBoxShow">
             <div class="mask-head flex">
                 <div class="mask-close" @click="searchShow(1)">
                     <van-icon name="arrow-left" />
@@ -23,7 +23,7 @@
                 <div class="mask-search">
                     <div class="search-main flex">
                         <van-icon name="search" />
-                        <input type="text" class="search-input" v-focus="searchFocus" placeholder="搜索您想要的内容">
+                        <input type="text" class="search-input" v-focus placeholder="搜索您想要的内容">
                     </div>
                 </div>
                 <div class="search-btn" @click="shopSearch()">搜索</div>
@@ -43,7 +43,7 @@
             <div class="home-nav" :class="{ 's-more' : navMoreShow }">
                 <ul class="nav-list">
                     <li class="nav-item" v-for="navItem in navs" :key="navItem.index">
-                        <router-link :to="`/shopList?id=${navItem.id}`">
+                        <router-link :to="`/shop/list?id=${navItem.id}`">
                             <img :src="testImgUrl(navItem.iconCls.replace(/\\/g,'/'))">
                             <span>{{ navItem.categoryName }}</span>
                         </router-link>
@@ -182,11 +182,18 @@ export default {
     components: {
         'shop-footer': shopFooter
     },
+    directives: {
+        focus: {
+            // 指令的定义
+            inserted: function (el,binding) {
+            el.focus()
+            }
+        }
+    },
     data(){
         return{
             searchValue: '',    //顶部搜索栏Value
             searchBoxShow: false,  //搜索显示
-            searchFocus: false, //搜索框焦点
             bannerList: '',     //banner列表
             navs: '',           //导航菜单
             navMoreShow: false, //更多菜单显示
@@ -207,7 +214,7 @@ export default {
         focus: {
             // 指令的定义
             inserted: function (el) {
-            el.focus()
+                el.focus()
             }
         }
     },
@@ -216,7 +223,6 @@ export default {
         searchShow(num){
             if(num == 0){
                 this.searchBoxShow = true
-                this.searchFocus = true
             }else if(num == 1){
                 this.searchBoxShow = false
             }
@@ -244,7 +250,6 @@ export default {
             let url = '/convenience/api/v1/bmsc/notice/list'
             axios.get(url).then((response) => {
                this.newList = response.data.result
-               console.log(this.newList)
             })
         },
         // 天天特惠
@@ -327,6 +332,7 @@ export default {
                     position: absolute;
                     top: 6px;
                     left: 30px;
+                    width: 85%;
                     border: 0;
                     font-size: 12px;
                     background-color: transparent;
@@ -336,7 +342,6 @@ export default {
         }
     }
     .search-mask{
-        display: none;
         position: fixed;
         top: 0px;
         left: 0px;
@@ -694,9 +699,6 @@ export default {
             padding-top: 10px;
             border-top: 1px solid #eaeaea;
         }
-    }
-    .show{
-        display: block;
     }
 }
 </style>

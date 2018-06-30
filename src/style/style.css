@@ -112,3 +112,71 @@ img {
     fill: currentColor;
     overflow: hidden;
 }
+
+/* Vant重构 */
+.van-cell__value span{
+    font-size: 16px;
+    font-weight: 600;
+    color: #ff8334;
+}
+.van-stepper__input{
+    font-size: 16px;
+    border: 0;
+}
+.van-stepper__minus, .van-stepper__plus{
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+}
+.van-stepper__minus{
+    background-color: transparent;
+    border: 1px solid #ff8334;
+}
+.van-stepper__plus{
+    background-color: #ff8334;
+    border: 0;
+}
+.van-stepper__minus::after, .van-stepper__minus::before{
+    background-color: #ff8334;
+}
+.van-stepper__plus::after, .van-stepper__plus::before {
+    background-color: #fff;
+}
+
+/* element重构 */
+.el-input__inner{
+    height: 30px;
+    border: 0;
+}
+.el-input-number .el-input__inner {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.el-input-number {
+    width: 100px;
+    line-height: 28px;
+}
+.el-input-number__decrease {
+    border-radius: 100%;
+    border: 1px solid #ff8334;
+    background: transparent;
+    color: #ff8334;
+}
+.el-input-number__increase{
+    border-radius: 100%;
+    border-left: 0;
+    background: #ff8334;
+    color: #fff;
+}
+.el-input-number__decrease, .el-input-number__increase {
+    width: 30px;
+}
+.el-input-number__decrease.is-disabled, .el-input-number__increase.is-disabled {
+    color: #ff8334;
+}
+.el-input-number__decrease:hover {
+    color: #ff8334;
+}
+.el-input-number__increase:hover{
+    color: #fff;
+}

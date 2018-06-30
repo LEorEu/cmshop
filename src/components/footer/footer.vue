@@ -1,5 +1,5 @@
 <template>
-    <div class="footer">
+    <footer class="footer">
         <div class="footer-main">
             <ul class="footer-nav">
                 <li class="nav-home nav-item">
@@ -36,7 +36,7 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </footer>
 </template>
 
 <style lang="less" scoped>

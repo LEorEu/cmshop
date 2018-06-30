@@ -3,6 +3,14 @@ import Router from 'vue-router'
 
 // 首页
 import Home from '@/page/home'
+
+
+// 商品详情页
+import List from '@/page/shop/list'
+// 商品详情页
+import Details from '@/page/shop/item'
+
+
 // 个人中心
 import Ucenter from '@/page/usercenter'
 
@@ -13,15 +21,26 @@ export default new Router({
   // base: '/cmshops/',
   mode: 'history',
   routes: [
-    // 首页
     {
       path: '/',
       redirect: '/home'
     },
+    // 首页
     {
       path: '/home',
       component: Home
-    },// 个人中心
+    },
+    // 商品列表页
+    {
+      path: '/shop/list',
+      component: List
+    },
+    // 商品详情页
+    {
+      path: '/shop/item',
+      component: Details
+    },
+    // 个人中心
     {
       path: '/ucenter',
       component: Ucenter

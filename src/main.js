@@ -8,6 +8,7 @@ import store from './store'
 import Vant from 'vant'
 import 'vant/lib/vant-css/index.css'
 import { Lazyload } from 'vant'
+import { InputNumber } from 'element-ui'
 
 import moment from 'moment'
 
@@ -16,6 +17,8 @@ import '@/style/iconfont.js'
 
 
 Vue.use(Vant).use(Lazyload)
+Vue.use(InputNumber)
+
 Vue.config.productionTip = false
 Vue.prototype.moment = moment
 moment.locale('zh-cn')
