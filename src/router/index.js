@@ -3,7 +3,8 @@ import Router from 'vue-router'
 
 // 首页
 import Home from '@/page/home'
-
+// 分类
+import Category from '@/page/home/category'
 
 // 商品详情页
 import List from '@/page/shop/list'
@@ -29,6 +30,11 @@ export default new Router({
     {
       path: '/home',
       component: Home
+    },
+    // 分类页
+    {
+      path: '/category',
+      component: Category
     },
     // 商品列表页
     {

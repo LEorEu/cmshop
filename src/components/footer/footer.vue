@@ -11,7 +11,7 @@
                     </router-link>
                 </li>
                 <li class="nav-sort nav-item">
-                    <router-link to="/fenlei" active-class="router-link-active">
+                    <router-link to="/category" active-class="router-link-active">
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-fenlei"></use>
                         </svg>
