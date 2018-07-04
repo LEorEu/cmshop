@@ -3,17 +3,25 @@ import Router from 'vue-router'
 
 // 首页
 import Home from '@/page/home'
+
 // 分类
 import Category from '@/page/home/category'
 
+// 购物车
+import Cart from '@/page/cart'
+
 // 商品详情页
 import List from '@/page/shop/list'
+
 // 商品详情页
 import Details from '@/page/shop/item'
 
-
 // 个人中心
 import Ucenter from '@/page/usercenter'
+
+// 我的地址
+import Address from '@/page/usercenter/address'
+
 // 我的订单
 import Order from '@/page/order'
 import orderAll from '../page/order/orderAll'
@@ -42,6 +50,11 @@ export default new Router({
       path: '/category',
       component: Category
     },
+    // 购物车
+    {
+      path: '/cart',
+      component: Cart
+    },
     // 商品列表页
     {
       path: '/shop/list',
@@ -56,6 +69,11 @@ export default new Router({
     {
       path: '/ucenter',
       component: Ucenter
+    },
+    // 我的地址
+    {
+      path: '/ucenter/address',
+      component: Address
     },
     // 我的订单
     {

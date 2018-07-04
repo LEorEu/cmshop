@@ -34,7 +34,7 @@
             <van-swipe :autoplay="3000">
                 <van-swipe-item v-for="banner in bannerList" :key="banner.index">
                     <!-- 开发环境下需执行testImgUrl方法 -->
-                    <img :src="testImgUrl(banner.imageAddr.replace(/\\/g,'/'))" />
+                    <img :src="utils.testImgUrl(banner.imageAddr.replace(/\\/g,'/'))" />
                 </van-swipe-item>
             </van-swipe>
         </div>
@@ -44,7 +44,7 @@
                 <ul class="nav-list">
                     <li class="nav-item" v-for="navItem in navs" :key="navItem.index">
                         <router-link :to="`/shop/list?id=${navItem.id}`">
-                            <img :src="testImgUrl(navItem.iconCls.replace(/\\/g,'/'))">
+                            <img :src="utils.testImgUrl(navItem.iconCls.replace(/\\/g,'/'))">
                             <span>{{ navItem.categoryName }}</span>
                         </router-link>
                     </li>
@@ -118,7 +118,7 @@
                                     </div>
                                 </div>
                                 <div class="shop-img">
-                                    <img :src="testImgUrl(shopOffer.goodIndexImage.replace(/\\/g,'/'))">
+                                    <img :src="utils.testImgUrl(shopOffer.goodIndexImage.replace(/\\/g,'/'))">
                                 </div>
                             </div>
                         </router-link>
@@ -139,7 +139,7 @@
                             <li v-for="(item, index) in indexNew" :key="index">
                                 <router-link :to="`/shop/item?id=${item.id}`" class="item-box">
                                     <div class="shop-img">
-                                        <img :src="testImgUrl(item.goodIndexImage.replace(/\\/g,'/'))">
+                                        <img :src="utils.testImgUrl(item.goodIndexImage.replace(/\\/g,'/'))">
                                     </div>
                                     <div class="shop-info">
                                         <h2>{{ item.goodName }}</h2>
@@ -273,11 +273,6 @@ export default {
                 result[i] = arr.slice(i * size, i * size + size);
             }
             return result
-        },
-        // 开发环境需执行此方法以便显示正确图片路径
-        testImgUrl(url){
-            let testUrl = `http://192.168.1.210:8080${url}`
-            return testUrl
         }
     }
 }

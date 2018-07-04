@@ -56,7 +56,7 @@
                         <p>图文详情</p>
                     </div>
                     <div class="nav-item" :class="{ 'focus' : !showFocus }" @click="tabNav(1)">
-                        <p>评价(204)</p>
+                        <p>评价(0)</p>
                     </div>
                 </div>
                 <div class="goods-details"></div>

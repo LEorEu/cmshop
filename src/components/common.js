@@ -28,12 +28,15 @@ let utils={
             case "0010":
                 unit = '待评价'
             break
+            case "0011":
+                unit = '已完成'
+            break
         }
         return unit
     },
     // 开发环境需执行此方法以便显示正确图片路径
     testImgUrl(url){
-        let testUrl = `http://192.168.1.210:8080${url}`
+        let testUrl = `http://39.106.27.49${url}`
         return testUrl
     }
 }

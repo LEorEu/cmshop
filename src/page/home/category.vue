@@ -10,7 +10,7 @@
         <div class="category-main">
             <div class="goods-list">
                 <div class="yx-banner">
-                    <img :src="utils.testImgUrl(yxBanner.replace(/\\/g,'/'))" />
+                    <!-- <img :src="utils.testImgUrl(yxBanner.replace(/\\/g,'/'))" /> -->
                 </div>
                 <div class="goods-main">
                     <ul class="items-list">

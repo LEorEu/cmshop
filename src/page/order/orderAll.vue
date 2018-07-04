@@ -20,26 +20,17 @@
                 </ul>
                 <div class="item-footer">
                     <div class="item-total clearfix">
-                        <p class="fl-r">合计：¥</p>
-                        <p class="fl-r">共计件商品</p>
+                        <p class="fl-r">合计：¥{{ parseFloat(order.total/100).toFixed(2) }}</p>
+                        <p class="fl-r">共计{{order.amount}}件商品</p>
                     </div>
                     <div class="item-btn">
-                        <!-- 待付款 -->
-                        <div class="status-pendingPayment" v-if="orderStatus(order.goods[0].status)">
-                            <a href="#">取消订单</a>
-                            <a href="#">去付款</a>
-                        </div>
-                        <!-- 待发货 -->
-                        <div class="status-sendItem">
-
-                        </div>
                         <!-- 待收货 -->
-                        <div class="status-acceptItem" v-if="orderStatus(order.goods[0].status)">
-                            <a href="#">确认收货</a>
+                        <div class="status-acceptItem clearfix" v-if="order.goods[0].status == '0009'">
+                            <van-button class="fl-r" size="small">确认收货</van-button>
                         </div>
                         <!-- 待评价 -->
-                        <div class="status-commentItem" v-if="orderStatus(order.goods[0].status)">
-                            <a href="#">立即评价</a>
+                        <div class="status-commentItem clearfix" v-if="order.goods[0].status == '0010'">
+                            <van-button class="fl-r" size="small">立即评价</van-button>
                         </div> 
                     </div>
                 </div>
@@ -54,7 +45,23 @@ import axios from 'axios'
 export default {
     data(){
         return{
-            orderList: [
+            orderList: {}
+        }
+    },
+    computed:{
+    },
+    mounted(){
+        // 获取订单列表
+        this.getOrderList();        
+    },
+    computed:{
+
+    },
+    methods:{
+        // 获取订单列表
+        getOrderList(){
+            //模拟获取接口数据
+            let res=[
                 {
                     "orderNo": "0001201806021039432232",
                     "goods": [
@@ -66,7 +73,7 @@ export default {
                             "total_fee": null,
                             "goodId": 152781751525238,
                             "goodName": "京觅 烟台红富士苹果 1大的",
-                            "status": "0008",
+                            "status": "0009",
                             "orderTime": "2018-06-02 10:39:43",
                             "paymode": "0003",
                             "payTime": "2018-06-02 10:43:05",
@@ -98,7 +105,7 @@ export default {
                             "total_fee": null,
                             "goodId": 152781751525238,
                             "goodName": "打算结婚大事件号地块",
-                            "status": "0008",
+                            "status": "0009",
                             "orderTime": "2018-06-02 10:39:43",
                             "paymode": "0003",
                             "payTime": "2018-06-02 10:43:05",
@@ -135,7 +142,7 @@ export default {
                             "total_fee": null,
                             "goodId": 152781751525238,
                             "goodName": "的撒谎健康大数据库打不开",
-                            "status": "0008",
+                            "status": "0010",
                             "orderTime": "2018-06-02 10:39:43",
                             "paymode": "0003",
                             "payTime": "2018-06-02 10:43:05",
@@ -167,7 +174,7 @@ export default {
                             "total_fee": null,
                             "goodId": 152781751525238,
                             "goodName": "保护科权威，打算",
-                            "status": "0008",
+                            "status": "0010",
                             "orderTime": "2018-06-02 10:39:43",
                             "paymode": "0003",
                             "payTime": "2018-06-02 10:43:05",
@@ -278,11 +285,11 @@ export default {
                             "total_fee": null,
                             "goodId": 152781751525238,
                             "goodName": "武器哦哦衣服比较暗",
-                            "status": "0008",
+                            "status": "0011",
                             "orderTime": "2018-06-02 10:39:43",
                             "paymode": "0003",
                             "payTime": "2018-06-02 10:43:05",
-                            "count": 2,
+                            "count": 1,
                             "price": 4590,
                             "source": "0001",
                             "couponId": 0,
@@ -305,23 +312,23 @@ export default {
                     ]
                 }
             ]
-        }
-    },
-    mounted(){
-        // 获取订单列表
-        this.getOrderList()
-    },
-    computed:{
 
-    },
-    methods:{
-        // 获取订单列表
-        getOrderList(){
-            console.log(this.orderList)
-            this.orderList
+            this.orderList=this.dataTreating(res);
         },
-        orderStatus(){
-
+        //数据处理
+        dataTreating(data={}){
+            let newData=[]
+            return  newData=data.map((item)=>{
+                if(item.goods){
+                    item.amount=0;
+                    item.total=0;
+                    item.goods.map((i)=>{
+                        item.amount+=i.count
+                        item.total+=i.count*i.price
+                    })
+                }
+                return item
+            })
         }
     }
 }
@@ -399,5 +406,11 @@ export default {
             }
         }
     }
+}
+.van-button--default{
+    margin-top: 5px;
+    min-width: 80px;
+    color: #ff8334;
+    border: 1px solid #ff8334;
 }
 </style>
