@@ -142,6 +142,12 @@ img {
 .van-stepper__plus::after, .van-stepper__plus::before {
     background-color: #fff;
 }
+.van-tab--active{
+    color: #ff8334;
+}
+.van-tabs__line{
+    background-color: #ff8334;
+}
 
 /* element重构 */
 .el-input__inner{

@@ -19,10 +19,10 @@
                 <div class="buy-info">
                     <div class="module-wrap clearfix">
                         <div class="price fl-l">
-                            <span>￥</span>{{ parseFloat(details.price/100).toFixed(2) }}<i> /斤</i>
+                            <span>￥</span>{{ parseFloat(details.price/100).toFixed(2) }}<i> /{{ utils.unitConvert(details.unit) }}</i>
                         </div>
                         <div class="sales fl-l">
-                            <p>销量：2800{{ details.sales }}</p>
+                            <p>销量：{{ details.sales }}</p>
                         </div>
                     </div>
                     <div class="module-wrap clearfix">
@@ -105,11 +105,6 @@ export default {
             axios.post(url,formData).then((response) => {
                this.details = response.data
             })
-        },
-        // 开发环境需执行此方法以便显示正确图片路径
-        testImgUrl(url){
-            let testUrl = `http://192.168.1.210:8080${url}`
-            return testUrl
         }
     }
 }

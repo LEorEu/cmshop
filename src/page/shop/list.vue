@@ -5,13 +5,12 @@
                 <li class="goods-item" v-for="(item, index) in items" :key="index">
                     <router-link :to="`/shop/item?id=${item.id}`" class="flex">
                         <div class="item-img">
-                            <img :src="testImgUrl(item.goodImage.replace(/\\/g,'/'))" />
-                            <!-- <img :src="item.goodImage" alt=""> -->
+                            <img :src="utils.testImgUrl(item.goodImage.replace(/\\/g,'/'))" />
                         </div>
                         <div class="item-info">
                             <h2 class="item-title">{{ item.goodName }}</h2>
                             <p class="item-sales">销量：{{ item.sales }}</p>
-                            <p class="item-price"><i>￥</i>{{ parseFloat(item.price/100).toFixed(2) }}<span>/{{ unitConvert(item.unit) }}</span></p>
+                            <p class="item-price"><i>￥</i>{{ parseFloat(item.price/100).toFixed(2) }}<span>/{{ utils.unitConvert(item.unit) }}</span></p>
                         </div>
                     </router-link>
                     <div class="number-wrap">
@@ -74,27 +73,6 @@ export default {
 				this.cartInfo.push(data);
             }
             // console.log(this.cartInfo)
-        },
-        // 后台接口数据转换 单位
-        unitConvert(item){
-            let unit = ''
-            switch(item){
-                case null:
-                    unit = '件'
-                break
-                case "0001":
-                    unit = '件'
-                break
-                case "0002":
-                    unit = '斤'
-                break
-            }
-            return unit
-        },
-        // 开发环境需执行此方法以便显示正确图片路径
-        testImgUrl(url){
-            let testUrl = `http://39.106.27.49${url}`
-            return testUrl
         }
     }
 }

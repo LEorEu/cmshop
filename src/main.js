@@ -12,6 +12,8 @@ import { InputNumber } from 'element-ui'
 
 import moment from 'moment'
 
+import utils from './components/common'
+
 import '@/style/style.css'
 import '@/style/iconfont.js'
 
@@ -21,6 +23,7 @@ Vue.use(InputNumber)
 
 Vue.config.productionTip = false
 Vue.prototype.moment = moment
+Vue.prototype.utils = utils
 moment.locale('zh-cn')
 
 /* eslint-disable no-new */

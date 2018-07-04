@@ -42,19 +42,19 @@
                         </svg>
                         <p>全部订单</p>
                     </router-link>
-                    <router-link to="/order#sendItem" class="my-order-entrances">
+                    <router-link to="/order/sendItem" class="my-order-entrances">
                         <svg class="icon" id="sendItem" aria-hidden="true">
                             <use xlink:href="#icon-z-clothes"></use>
                         </svg>
                         <p>待发货</p>
                     </router-link>
-                    <router-link to="/order#acceptItem" class="my-order-entrances">
+                    <router-link to="/order/acceptItem" class="my-order-entrances">
                         <svg class="icon" id="acceptItem" aria-hidden="true">
                             <use xlink:href="#icon-truckfuzhi"></use>
                         </svg>
                         <p>待收货</p>
                     </router-link>
-                    <router-link to="/order#commentItem" class="my-order-entrances">
+                    <router-link to="/order/commentItem" class="my-order-entrances">
                         <svg class="icon" id="commentItem" aria-hidden="true">
                             <use xlink:href="#icon-pingjia"></use>
                         </svg>
@@ -64,8 +64,7 @@
             </van-cell-group>
 
             <van-cell-group class="my-cate">
-                <van-cell class="my-over my-cate-item" title="我的余额" value="￥330" />
-                
+                <van-cell class="my-over my-cate-item" title="我的余额" value="￥0" />
                 <van-cell class="my-vip my-cate-item" title="我的会员" to="/ucenter/vip" is-link />
                 <van-cell class="my-address my-cate-item" title="地址管理" to="/ucenter/address" is-link />
                 <van-cell class="feedback my-cate-item" title="意见反馈" to="/ucenter/feedback" is-link />

@@ -14,6 +14,12 @@ import Details from '@/page/shop/item'
 
 // 个人中心
 import Ucenter from '@/page/usercenter'
+// 我的订单
+import Order from '@/page/order'
+import orderAll from '../page/order/orderAll'
+import sendItem from '../page/order/sendItem'
+import acceptItem from '../page/order/acceptItem'
+import commentItem from '../page/order/commentItem'
 
 Vue.use(Router)
 
@@ -50,6 +56,30 @@ export default new Router({
     {
       path: '/ucenter',
       component: Ucenter
+    },
+    // 我的订单
+    {
+      path: '/order',
+      component: Order,
+      redirect: '/order/orderAll',
+      // 其他订单状态
+      children: [{
+          path: 'orderAll',
+          component: orderAll
+        },
+        {
+          path: 'sendItem',
+          component: sendItem
+        },
+        {
+          path: 'acceptItem',
+          component: acceptItem
+        },
+        {
+          path: 'commentItem',
+          component: commentItem
+        },
+      ]
     },
   ]
 })
