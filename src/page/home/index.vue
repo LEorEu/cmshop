@@ -103,7 +103,7 @@
             <div class="activity-title">
                 <i class="line"></i>
                 <h3 class="fl-l">今日特惠</h3>
-                <p class="fl-r">更多 ></p>
+                <!-- <p class="fl-r">更多 ></p> -->
             </div>
             <div class="activity-main index-offer">
                 <ul class="shop-offer-list clearfix">

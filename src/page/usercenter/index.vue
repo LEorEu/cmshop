@@ -11,11 +11,11 @@
                     <h3 class="my-name">紫金会员WX-SMP128</h3>
                     <span class="status-info"></span>
                 </div>
-                <router-link class="my-header-settings" to="/ucenter/setting">
+                <!-- <router-link class="my-header-settings" to="/ucenter/setting">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-shezhi"></use>
                     </svg>
-                </router-link>
+                </router-link> -->
             </div>
             <div class="my-header-features flex">
                 <router-link class="my-header-collection item-features" to="/ucenter/collection">
@@ -24,7 +24,7 @@
                     </svg>
                     <p>我的收藏</p>
                 </router-link>
-                <router-link class="my-header-coupon item-features" to="/ucenter/coupon">
+                <router-link class="my-header-coupon item-features" to="/coupon">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-shezhi"></use>
                     </svg>
@@ -65,12 +65,24 @@
 
             <van-cell-group class="my-cate">
                 <van-cell class="my-over my-cate-item" title="我的余额" value="￥0" />
-                <van-cell class="my-vip my-cate-item" title="我的会员" to="/ucenter/vip" is-link />
+                <van-cell class="my-vip my-cate-item" title="我的会员" is-link @click="toast(1)" />
                 <van-cell class="my-address my-cate-item" title="地址管理" to="/ucenter/address" is-link />
-                <van-cell class="feedback my-cate-item" title="意见反馈" to="/ucenter/feedback" is-link />
+                <van-cell class="feedback my-cate-item" title="意见反馈" is-link @click="feedback()" />
                 <van-cell class="about-us my-cate-item" title="关于我们" to="/home/aboutus" />
             </van-cell-group>
         </div>
+        <van-actionsheet v-model="feedbackShow" title="意见反馈">
+            <van-cell-group>
+                <van-field
+                    v-model="message"
+                    label="留言"
+                    type="textarea"
+                    placeholder="请输入留言"
+                    rows="1"
+                    autosize
+                />
+            </van-cell-group>
+        </van-actionsheet>
         <shop-footer></shop-footer>
     </div>
 </template>
@@ -86,7 +98,9 @@ export default {
     },
     data(){
         return{
-            userInfo: ''    //个人信息数据
+            userInfo: '',    //个人信息数据
+            feedbackText: '',
+            feedbackShow: false
         }
     },
     mounted(){
@@ -105,6 +119,17 @@ export default {
             axios.post(url,formData).then((response) => {
                 console.log(response)
             })
+        },
+        feedback(){
+            this.feedbackShow = true
+        },
+        toast(num){
+            if( num == 1 ){
+                this.$toast('即将开放！')
+            }else if( num == 2 ){
+                this.feedbackShow = false
+                this.$toast('感谢反馈！')
+            }
         }
     }
 }

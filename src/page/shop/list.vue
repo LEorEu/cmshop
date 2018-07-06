@@ -19,7 +19,7 @@
                 </li>
             </ul>
         </div>
-        <footer-cart></footer-cart>
+        <footer-cart :list-add-cart="listAddCart"></footer-cart>
     </div>
 </template>
 
@@ -35,7 +35,7 @@ export default {
     data(){
         return{
             items: '',      //商品列表数据
-            cartInfo: [],   //添加到购物车数组
+            listAddCart: [],   //添加到购物车数组
         }
     },
     mounted(){
@@ -54,25 +54,22 @@ export default {
             })
         },
         // 监听商品添加到购物车
-        handleChange(id,name,num,price) {
+        handleChange(id,name,num,gp) {
             let data = {
-				goodsId: id,
-				goodscount: num,
-				goodsName: name,
-				unitPrice: price
+                goodId: id,
+                goodName: name,
+                count: num,
+                price: gp
             }
-            // 循环添加相同商品到同一对象
-            for(let i in this.cartInfo){
-				if(this.cartInfo[i].goodsId == id){
-					this.cartInfo.splice(i,1)
-					break
-				}
-            }
-            // 添加商品到数组
-            if(num!==0){
-				this.cartInfo.push(data);
-            }
-            // console.log(this.cartInfo)
+            let userId = '68'
+
+            let url = `/convenience/api/v1/bmsc/cart/${userId}/insert`
+            let formData = new FormData()
+                formData.append('goodId',data.goodId)
+                formData.append('count',data.count)
+            axios.post(url,formData).then((response) => {
+                this.listAddCart.push(1)
+            })
         }
     }
 }

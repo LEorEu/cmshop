@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div class="cart">
+    <div class="cart-header clearfix">
+      <p class="fl-l">【购物车信息】</p>
+      <van-icon class="fl-r" name="delete" @click="deleteCart()" />
+    </div>
     <van-checkbox-group class="card-goods" v-model="checkedGoods">
       <van-checkbox
         class="card-goods__item"
@@ -8,18 +12,18 @@
         :name="item.id"
       >
         <van-card
-          :title="item.title"
+          :title="item.goodName"
           :desc="item.desc"
-          :num="item.num"
+          :num="item.count"
           :price="formatPrice(item.price)"
-          :thumb="item.thumb"
+          :thumb="utils.testImgUrl(item.goodImage.replace(/\\/g,'/'))"
         />
       </van-checkbox>
     </van-checkbox-group>
     <van-submit-bar
       :price="totalPrice"
       :disabled="!checkedGoods.length"
-      :button-text="submitBarText"
+      button-text="结算"
       @submit="onSubmit"
     />
     <shop-footer></shop-footer>
@@ -27,71 +31,81 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 import shopFooter from '../../components/footer/footer'
-import { Checkbox, CheckboxGroup, Card, SubmitBar, Toast } from 'vant'
 
 export default {
   components: {
-    [Card.name]: Card,
-    [Checkbox.name]: Checkbox,
-    [SubmitBar.name]: SubmitBar,
-    [CheckboxGroup.name]: CheckboxGroup,
     'shop-footer': shopFooter
   },
   data() {
     return {
-      checkedGoods: ['1', '2', '3'],
-      goods: [{
-        id: '1',
-        title: '进口香蕉',
-        desc: '约250g，2根',
-        price: 200,
-        num: 1,
-        thumb: 'https://img.yzcdn.cn/public_files/2017/10/24/2f9a36046449dafb8608e99990b3c205.jpeg'
-      }, {
-        id: '2',
-        title: '陕西蜜梨',
-        desc: '约600g',
-        price: 690,
-        num: 1,
-        thumb: 'https://img.yzcdn.cn/public_files/2017/10/24/f6aabd6ac5521195e01e8e89ee9fc63f.jpeg'
-      }, {
-        id: '3',
-        title: '美国伽力果',
-        desc: '约680g/3个',
-        price: 2680,
-        num: 1,
-        thumb: 'https://img.yzcdn.cn/public_files/2017/10/24/320454216bbe9e25c7651e1fa51b31fd.jpeg'
-      }]
-    };
+      checkedGoods: [],
+      goods: []
+    }
   },
   computed: {
-    submitBarText() {
-      const count = this.checkedGoods.length;
-      return '结算' + (count ? `(${count})` : '')
-    },
     totalPrice() {
       return this.goods.reduce((total, item) => total + (this.checkedGoods.indexOf(item.id) !== -1 ? item.price : 0), 0)
     }
   },
+  mounted(){
+    this.getCartInfo()
+  },
   methods: {
+    // 获取购物车详情
+    getCartInfo(){
+        let userId = '68'
+        let url = `/convenience/api/v1/bmsc/cart/${userId}/list`
+        axios.post(url).then((response) => {
+            this.goods = response.data.result
+            console.log(this.goods)
+        })
+    },
+    // 清空购物车
+    deleteCart(){
+      this.$dialog.confirm({
+        title: '您确定要清空购物车吗',
+      }).then(() => {
+        // on confirm
+      }).catch(() => {
+        // on cancel
+      })
+    },
     formatPrice(price) {
       return (price / 100).toFixed(2)
     },
     onSubmit() {
-      Toast('点击结算')
+      this.$toast('点击结算')
     }
   }
 }
 </script>
 
 <style lang="less">
+.cart{
+  margin-top: 10px;
+  margin-bottom: 110px;
+  -webkit-box-shadow: 0 0 10px rgba(51, 51, 51, 0.1);
+  box-shadow: 0 0 10px rgba(51, 51, 51, 0.1);
+}
+.cart-header{
+  padding: 10px;
+  p{
+    font-size: 16px;
+    color: #333;
+  }
+  .van-icon{
+    font-size: 16px;
+    color: #333;
+  }
+}
 .van-submit-bar{
     bottom: 61px;
     z-index: 101;
 }
 .card-goods {
-  padding: 10px 0;
   background-color: #fff;
   &__item {
     position: relative;
@@ -113,18 +127,20 @@ export default {
     }
   }
 }
-.van-button--danger{
-    background-color: #ff8334;
-    border: 1px solid #ff8334;
+.card-goods__item{
+  background-color: #fff;
+  border-bottom: 1px solid #f6f6f6;
 }
-.van-submit-bar__price-decimal{
+.card-goods__item:nth-child(1){
+  border-top: 1px solid #f6f6f6;
+}
+.van-card{
+  background-color: #fff;
+}
+.van-dialog__confirm, .van-dialog__confirm:active {
     color: #ff8334;
 }
-.van-submit-bar__price-integer {
-    color: #ff8334;
-}
-.van-checkbox--checked{
-    border-color: #ff8334;
-    background-color: #ff8334;
+.van-card__content {
+    padding-top: 20px;
 }
 </style>

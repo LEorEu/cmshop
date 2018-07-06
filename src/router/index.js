@@ -16,8 +16,14 @@ import List from '@/page/shop/list'
 // 商品详情页
 import Details from '@/page/shop/item'
 
+// 支付页
+import Pay from '@/page/pay/pay'
+
 // 个人中心
 import Ucenter from '@/page/usercenter'
+
+// 优惠券
+import Coupon from '@/page/coupon'
 
 // 我的地址
 import Address from '@/page/usercenter/address'
@@ -32,9 +38,9 @@ import commentItem from '../page/order/commentItem'
 Vue.use(Router)
 
 export default new Router({
-  // mode: 'hash',
-  // base: '/cmshops/',
-  mode: 'history',
+  mode: 'hash',
+  base: '/cmshops/',
+  // mode: 'history',
   routes: [
     {
       path: '/',
@@ -55,6 +61,11 @@ export default new Router({
       path: '/cart',
       component: Cart
     },
+    // 支付页
+    {
+      path: '/pay',
+      component: Pay
+    },
     // 商品列表页
     {
       path: '/shop/list',
@@ -69,6 +80,11 @@ export default new Router({
     {
       path: '/ucenter',
       component: Ucenter
+    },
+    // 优惠券
+    {
+      path: '/coupon',
+      component: Coupon
     },
     // 我的地址
     {
