@@ -6,7 +6,7 @@
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-gouwuche"></use>
                     </svg>
-                    <span class="total-num">{{ cartTotal.num }}</span>
+                    <span class="total-num" v-if="cartTotal.num != 0">{{ cartTotal.num }}</span>
                 </div>
             </div>
             <div class="cart-total fl-l">
@@ -19,7 +19,7 @@
         <van-popup class="cart-box" v-model="boxShow" position="bottom" :overlay="true">
             <div class="cartview">
                 <div class="cartview-header clearfix">
-                    <div class="delete-cart fl-l clearfix">
+                    <div class="delete-cart fl-l clearfix" @click="deleteCart()">
                         <van-icon class="fl-l" name="delete" />
                         <p class="fl-l">清空购物车</p>
                     </div>
@@ -80,7 +80,7 @@ export default {
     methods:{
         // 获取购物车详情
         getCartInfo(){
-            let userId = '68'
+            let userId = '51'
             let url = `/convenience/api/v1/bmsc/cart/${userId}/list`
             axios.post(url).then((response) => {
                this.footerCartInfo = response.data.result
@@ -88,17 +88,18 @@ export default {
         },
         // 底部购物车详情弹出
         cartDetails(num){
-            console.log(this.boxShow)
-            if( num == 1 ){
-                if(this.boxShow == true){
+            if(this.cartTotal.num != 0){
+                if( num == 1 ){
+                    if(this.boxShow == true){
+                        this.boxShow = false
+                        return false
+                    }else{
+                        this.boxShow = true
+                        return false
+                    }
+                }else if( num == 0){
                     this.boxShow = false
-                    return false
-                }else{
-                    this.boxShow = true
-                    return false
                 }
-            }else if( num == 0){
-                this.boxShow = false
             }
         },
         // 监听商品添加到购物车
@@ -109,14 +110,27 @@ export default {
                 count: num,
                 price: gp
             }
-            console.log(data)
-            let userId = '68'
+            let userId = '51'
             let url = `/convenience/api/v1/bmsc/cart/${userId}/insert`
             let formData = new FormData()
                 formData.append('goodId',data.goodId)
                 formData.append('count',data.count)
             axios.post(url,formData).then((response) => {
                 this.getCartInfo()
+                this.$emit('cartStatus',1)
+                if(this.cartTotal.num == 0){
+                    this.boxShow = false
+                }
+            })
+        },
+        // 清空购物车
+        deleteCart(){
+            let userId = '51'
+            let url = `convenience/api/v1/bmsc/cart/${userId}/clear`
+            axios.post(url).then((response) => {
+                this.getCartInfo()
+                this.$emit('cartStatus',1)
+                this.boxShow = false
             })
         },
         // 结算

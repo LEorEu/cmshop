@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="number-wrap">
-                    <el-input-number v-model="number" @change="handleChange(details.id,details.goodName,number,details.price)" :min="0"></el-input-number>
+                    <el-input-number v-model="details.count" @change="handleChange(details.id,details.goodName,details.count,details.price)" :min="0"></el-input-number>
                 </div>
             </div>
             <div class="goods-service">
@@ -63,7 +63,7 @@
                 <div class="goods-evaluation"></div>
             </div>
         </div>
-        <footer-cart :details-add-cart="detailsAddCart"></footer-cart>
+        <footer-cart @cartStatus="cartChange" :details-add-cart="detailsAddCart"></footer-cart>
     </div>
 </template>
 
@@ -78,8 +78,7 @@ export default {
     },
     data(){
         return{
-            details: '',          //商品详情
-            number: '',         //计算器
+            details: {},          //商品详情
             showFocus: true,    //标签切换焦点
             detailsAddCart: []        //添加到购物车信息
         }
@@ -105,27 +104,32 @@ export default {
                 count: num,
                 price: gp
             }
-            let userId = '68'
+            let userId = '51'
 
             let url = `/convenience/api/v1/bmsc/cart/${userId}/insert`
             let formData = new FormData()
                 formData.append('goodId',data.goodId)
                 formData.append('count',data.count)
             axios.post(url,formData).then((response) => {
-                console.log(1)
                 this.detailsAddCart.push(1)
             })
         },
         // 获取商品详情
         getGoodsInfo(){
+            let userId = '51'
             let url = '/convenience/api/v1/address/queryGood'
             const goodId = this.$route.query.id
             let formData = new FormData()
                 formData.append('goodId',goodId)
+                formData.append('userId',userId)
             axios.post(url,formData).then((response) => {
-               this.details = response.data
+               this.details = response.data.result
             })
-        }
+        },
+        // 监听商品数量变化
+        cartChange(val){
+            this.getGoodsInfo()
+        },
     }
 }
 </script>

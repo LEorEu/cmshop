@@ -5,7 +5,9 @@
                 <a class="add-address" @click="addressBox()">+ 添加收货地址</a>
             </div>
             <div class="address-focus" v-if="!payAddressShow">
-                <van-icon name="location" />
+                <div class="location-ring">
+                    <van-icon name="location" />
+                </div>
                 <div class="van-address-list__name">{{ payAddress.userName }}&nbsp;&nbsp;{{ payAddress.mobilePhone }}</div>
                 <div class="van-address-list__address">收货地址：{{ payAddress.address }}</div>
                 <van-icon name="arrow" />
@@ -21,10 +23,30 @@
                         <div class="goods-img">
                             <img src="" alt="">
                         </div>
-                        <div class="goods-text">
+                        <div class="goods-text clearfix">
                             <p class="goods-title">新鲜土豆</p>
-                            <p class="goods-price">￥5.20</p>
-                            <p>x 1</p>
+                            <p class="goods-price fl-l">￥5.20</p>
+                            <p class="goods-count fl-r">x 1</p>
+                        </div>
+                    </li>
+                    <li class="goods-item flex">
+                        <div class="goods-img">
+                            <img src="" alt="">
+                        </div>
+                        <div class="goods-text clearfix">
+                            <p class="goods-title">新鲜土豆</p>
+                            <p class="goods-price fl-l">￥5.20</p>
+                            <p class="goods-count fl-r">x 1</p>
+                        </div>
+                    </li>
+                    <li class="goods-item flex">
+                        <div class="goods-img">
+                            <img src="" alt="">
+                        </div>
+                        <div class="goods-text clearfix">
+                            <p class="goods-title">新鲜土豆</p>
+                            <p class="goods-price fl-l">￥5.20</p>
+                            <p class="goods-count fl-r">x 1</p>
                         </div>
                     </li>
                 </ul>
@@ -100,7 +122,7 @@ export default {
 
 <style lang="less" scoped>
 .pay{
-    background-color: #f0f0f0;
+    background-color: #f3f3f3;
     padding-bottom: 60px;
     .pay-address{
         padding: 15px 10px;
@@ -121,12 +143,20 @@ export default {
         .address-focus{
             position: relative;
             padding-left: 50px;
-            .van-icon-location{
+            .location-ring{
                 position: absolute;
                 left: 10px;
-                top: calc(50% - 10px);
-                font-size: 20px;
-                color: #ff8334;
+                top: calc(50% - 12px);
+                width: 24px;
+                height: 24px;
+                line-height: 28px;
+                text-align: center;
+                border-radius: 100%;
+                background-color: #ff8334;
+            }
+            .van-icon-location{
+                font-size: 14px;
+                color: #fff;
             }
             .van-icon-arrow{
                 position: absolute;
@@ -151,7 +181,40 @@ export default {
         .section-main{
             padding: 10px;
             .goods-item{
-                
+                margin-top: 10px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #f8f8f8;
+                .goods-img{
+                    width: 62px;
+                    height: 62px;
+                    border: 1px solid #f8f8f8;
+                }
+                .goods-text{
+                    margin-left: 20px;
+                    width: calc(100% - 82px);
+                    .goods-title{
+                        margin-top: 5px;
+                        font-size: 16px;
+                        color: #333;
+                    }
+                    .goods-price{
+                        margin-top: 10px;
+                        font-size: 14px;
+                        color: #999;
+                    }
+                    .goods-count{
+                        margin-top: 10px;
+                        font-size: 14px;
+                        color: #999;
+                    }
+                }
+            }
+            .goods-item:nth-child(1){
+                margin-top: 0;
+            }
+            .goods-item:nth-last-child(1){
+                border-bottom: 0;
+                padding-bottom: 0;
             }
         }
     }

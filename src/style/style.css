@@ -29,7 +29,7 @@ time, mark, audio, video {
 }
 html{
     font-size: 14px;
-    background-color: #f8f8f8;
+    background-color: #f3f3f3;
 }
 body {
     margin: 0 auto;
@@ -172,7 +172,55 @@ img {
     background-color: #ff8334;
 }
 
+/* vant 购物车样式 */
+.cart .card-goods__item{
+    background-color: #fff;
+    border-bottom: 1px solid #f6f6f6;
+}
+.cart .card-goods__item:nth-child(1){
+    border-top: 1px solid #f6f6f6;
+}
+.cart .van-card{
+    background-color: #fff;
+}
+.van-dialog__confirm, .van-dialog__confirm:active {
+      color: #ff8334;
+}
+.cart .van-card__content {
+      padding-top: 20px;
+}
+.cart .van-icon-delete{
+    margin-top: 3px;
+}
+.cart .card-goods {
+    background-color: #fff;
+}
+.cart .card-goods__item {
+    position: relative;
+    background-color: #fff;
+}
+.cart .van-checkbox__label {
+    width: 100%;
+    padding: 0 10px 0 15px;
+    box-sizing: border-box;
+}
+.cart .van-checkbox__icon {
+    top: 50%;
+    left: 10px;
+    z-index: 1;
+    position: absolute;
+    margin-top: -10px;
+}
+.cart .van-card__price {
+    color: #ff8334;
+}
 
+.van-modal {
+    background-color: rgba(0,0,0,.3);
+}
+.van-actionsheet{
+    height: 70%;
+}
 
 /* element重构 */
 .el-input__inner{
@@ -223,10 +271,4 @@ img {
     padding-left: 20px;
     padding-right: 20px;
     height: 24px;
-}
-.van-modal {
-    background-color: rgba(0,0,0,.3);
-}
-.van-actionsheet{
-    height: 70%;
 }

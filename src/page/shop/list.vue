@@ -14,12 +14,12 @@
                         </div>
                     </router-link>
                     <div class="number-wrap">
-                        <el-input-number v-model="item.remark1" @change="handleChange(item.id,item.goodName,item.remark1,item.price)" :min="0" label="描述文字"></el-input-number>
+                        <el-input-number v-model="item.count" @change="handleChange(item.id,item.goodName,item.count,item.price)" :min="0" label="描述文字"></el-input-number>
                     </div>
                 </li>
             </ul>
         </div>
-        <footer-cart :list-add-cart="listAddCart"></footer-cart>
+        <footer-cart @cartStatus="cartChange" :list-add-cart="listAddCart"></footer-cart>
     </div>
 </template>
 
@@ -34,7 +34,7 @@ export default {
     },
     data(){
         return{
-            items: '',      //商品列表数据
+            items: {},      //商品列表数据
             listAddCart: [],   //添加到购物车数组
         }
     },
@@ -45,10 +45,12 @@ export default {
     methods:{
         // 获取商品列表
         getGoodsList(){
+            let userId = '51'
             let url = '/convenience/api/v1/bmsc/good/listid'
             const categoryId = this.$route.query.id
             let formData = new FormData()
                 formData.append('categoryId',categoryId)
+                formData.append('userId',userId)
             axios.post(url,formData).then((response) => {
                this.items = response.data.result.cResult
             })
@@ -61,7 +63,7 @@ export default {
                 count: num,
                 price: gp
             }
-            let userId = '68'
+            let userId = '51'
 
             let url = `/convenience/api/v1/bmsc/cart/${userId}/insert`
             let formData = new FormData()
@@ -70,7 +72,11 @@ export default {
             axios.post(url,formData).then((response) => {
                 this.listAddCart.push(1)
             })
-        }
+        },
+        // 监听商品数量变化
+        cartChange(val){
+            this.getGoodsList()
+        },
     }
 }
 </script>
