@@ -259,7 +259,9 @@ img {
 .el-input-number__increase:hover{
     color: #fff;
 }
-
+.goods-list .el-input__inner{
+    line-height: 30px;
+}
 .cartview .el-input-number {
     width: 80px;
     line-height: 20px;
@@ -271,4 +273,16 @@ img {
     padding-left: 20px;
     padding-right: 20px;
     height: 24px;
+    line-height: 24px;
+}
+.van-loading{
+    position: absolute;
+    left: calc(50% - 25px);
+    top: 40%;
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, .5);
+    z-index: 999;
 }

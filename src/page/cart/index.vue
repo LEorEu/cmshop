@@ -7,8 +7,8 @@
     <van-checkbox-group class="card-goods" v-model="checkedGoods">
       <van-checkbox class="card-goods__item"
         v-for="item in goods"
-        :key="item.id"
-        :name="item.id"
+        :key="item.goodId"
+        :name="item"
       >
         <van-card
           :title="item.goodName"
@@ -20,7 +20,7 @@
       </van-checkbox>
     </van-checkbox-group>
     <van-submit-bar
-      :price="totalPrice"
+      :price="cartTotal.price"
       :disabled="!checkedGoods.length"
       button-text="结算"
       @submit="onSubmit"
@@ -41,14 +41,23 @@ export default {
   data() {
     return {
       checkedGoods: [],
-      goods: []
+      goods: [],
     }
   },
   computed: {
-    // 计算总价
-    totalPrice() {
-      return this.goods.reduce((total, item) => total + (this.checkedGoods.indexOf(item.id) !== -1 ? item.price : 0), 0)
-    }
+    // 购物车计算总价
+		cartTotal(){
+      let total = {
+          num: 0,
+          price: 0
+      }
+      let len = this.checkedGoods.length
+      for(var i = 0; i < len; i++){
+          total.num += parseInt(this.checkedGoods[i].count)
+          total.price += parseInt(this.checkedGoods[i].count * this.checkedGoods[i].price)
+      }
+      return total
+		}
   },
   mounted(){
     this.getCartInfo()
@@ -56,8 +65,7 @@ export default {
   methods: {
     // 获取购物车详情
     getCartInfo(){
-        let userId = '51'
-        let url = `/convenience/api/v1/bmsc/cart/${userId}/list`
+        let url = `/convenience/api/v1/bmsc/cart/${this.$store.state.userId}/list`
         axios.post(url).then((response) => {
             this.goods = response.data.result
         })
@@ -67,8 +75,7 @@ export default {
       this.$dialog.confirm({
         title: '您确定要清空购物车吗',
       }).then(() => {
-        let userId = '51'
-        let url = `convenience/api/v1/bmsc/cart/${userId}/clear`
+        let url = `/convenience/api/v1/bmsc/cart/${this.$store.state.userId}/clear`
         axios.post(url).then((response) => {
             this.getCartInfo()
         })
@@ -81,7 +88,8 @@ export default {
       return (price / 100).toFixed(2)
     },
     onSubmit() {
-      this.$toast('点击结算')
+      this.$store.state.creatOrderInfo = this.checkedGoods
+      this.$router.push('/pay')
     }
   }
 }
@@ -112,5 +120,4 @@ export default {
     bottom: 61px;
     z-index: 101;
 }
-
 </style>

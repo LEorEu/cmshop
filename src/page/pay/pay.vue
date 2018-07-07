@@ -19,34 +19,14 @@
             </div>
             <div class="section-main">
                 <ul class="goods-list">
-                    <li class="goods-item flex">
+                    <li class="goods-item flex" v-for="(item, index) in cartInfo" :key="index">
                         <div class="goods-img">
-                            <img src="" alt="">
+                            <img :src="utils.testImgUrl(item.goodImage.replace(/\\/g,'/'))" alt="">
                         </div>
                         <div class="goods-text clearfix">
-                            <p class="goods-title">新鲜土豆</p>
-                            <p class="goods-price fl-l">￥5.20</p>
-                            <p class="goods-count fl-r">x 1</p>
-                        </div>
-                    </li>
-                    <li class="goods-item flex">
-                        <div class="goods-img">
-                            <img src="" alt="">
-                        </div>
-                        <div class="goods-text clearfix">
-                            <p class="goods-title">新鲜土豆</p>
-                            <p class="goods-price fl-l">￥5.20</p>
-                            <p class="goods-count fl-r">x 1</p>
-                        </div>
-                    </li>
-                    <li class="goods-item flex">
-                        <div class="goods-img">
-                            <img src="" alt="">
-                        </div>
-                        <div class="goods-text clearfix">
-                            <p class="goods-title">新鲜土豆</p>
-                            <p class="goods-price fl-l">￥5.20</p>
-                            <p class="goods-count fl-r">x 1</p>
+                            <p class="goods-title">{{ item.goodName }}</p>
+                            <p class="goods-price fl-l">￥{{ parseFloat(item.price/100).toFixed(2) }}</p>
+                            <p class="goods-count fl-r">x {{ item.count }}</p>
                         </div>
                     </li>
                 </ul>
@@ -69,7 +49,7 @@
         <div class="pay-total section">
             <div class="total-text clearfix">
                 <p class="fl-l">商品总价</p>
-                <p class="fl-r">￥25.00</p>
+                <p class="fl-r">￥{{ parseFloat(cartTotal/100).toFixed(2) }}</p>
             </div>
             <div class="total-text clearfix">
                 <p class="fl-l">快递费</p>
@@ -77,15 +57,16 @@
             </div>
             <div class="total-text clearfix">
                 <p class="fl-l">优惠券</p>
-                <p class="fl-r">-￥2.00</p>
+                <p class="fl-r">-￥0.00</p>
             </div>
         </div>
         <van-submit-bar
-            :price="3050"
+            :price="cartTotal"
             label="实付款："
             button-text="去付款"
             @submit="onSubmit"
         />
+    <van-loading color="black" v-show="loadingShow" />
     </div>
 </template>
 
@@ -103,18 +84,86 @@ export default {
             payAddressShow: false,      //地址状态切换
             coupon: '(暂无可用)',       //优惠券
             remark: '',                 //备注
-            goodsInfo: ''               //订单信息
+            goodsInfo: '',              //订单信息
+            loadingShow: false,         //
+            cartInfo: []                //购物车传递过来的数据
         }
     },
     mounted(){
-        
+        this.initData()
+    },
+    computed: {
+        // 计算总价
+        cartTotal(){
+            let total = 0
+            let len = this.cartInfo.length
+            for(var i = 0; i < len; i++){
+                total += parseInt(this.cartInfo[i].count * this.cartInfo[i].price)
+            }
+            return total
+        }
     },
     methods:{
+        // 数据初始化
+        initData(){
+            this.cartInfo = this.$store.state.creatOrderInfo
+            if(this.cartInfo.length == 0){
+                this.$dialog.alert({
+                    message: '没有订单数据'
+                }).then(() => {
+                    this.$router.push('/cart')
+                })
+            }
+        },
+        // 地址显示
         addressBox(){
 
         },
+        // 提交数据
         onSubmit(){
-
+            this.loadingShow = true
+            let arr = []
+            for (let i = 0; i < this.cartInfo.length; i++) {
+                arr.push(this.cartInfo[i].goodId)
+            }
+            let url = '/convenience/pay/toPayInit'
+            let formData = new FormData()
+                formData.append('userId',this.$store.state.userId)
+                formData.append('array',arr)
+            axios.post(url,formData).then((response) => {
+                this.loadingShow = false
+                let data = response.data
+                if (typeof WeixinJSBridge == "undefined"){
+                    if( document.addEventListener ){
+                        document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady, false);
+                    }else if (document.attachEvent){
+                        document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady)
+                        document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady)
+                    }
+                }else{
+                    this.onBridgeReady(data)
+                }
+            })
+        },
+        //调用微信支付页面
+        onBridgeReady(data) {
+            WeixinJSBridge.invoke(
+                'getBrandWCPayRequest', {
+                    "appId": data.unifiedOrderRequest.appid,     //公众号名称，由商户传入     
+                    "timeStamp": data.timestamp,         //时间戳，自1970年以来的秒数     
+                    "nonceStr": data.noncestr, //随机串     
+                    "package": `prepay_id=${data.prepay_id}`,
+                    "signType": 'MD5',         //微信签名方式：     
+                    "paySign": data.paySign, //微信签名
+                },
+                function (res) {
+                    if (res.err_msg == "get_brand_wcpay_request:ok") {
+                        console.log('支付成功！')
+                    }else{     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                        alert("支付失败！")
+                    }
+                }
+            )
         }
     }
 }

@@ -100,7 +100,8 @@ export default {
         return{
             userInfo: '',    //个人信息数据
             feedbackText: '',
-            feedbackShow: false
+            feedbackShow: false,
+            message: ''
         }
     },
     mounted(){
@@ -115,7 +116,7 @@ export default {
                 weChat: 'oYd_803OC99apWyFl-Zvm-X9YYcs'
             }
             let formData = new FormData()
-            formData.append('weChat', 'oYd_803OC99apWyFl-Zvm-X9YYcs');
+                formData.append('weChat', 'oYd_803OC99apWyFl-Zvm-X9YYcs');
             axios.post(url,formData).then((response) => {
                 console.log(response)
             })

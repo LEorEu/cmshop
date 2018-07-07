@@ -126,7 +126,7 @@ export default {
         // 清空购物车
         deleteCart(){
             let userId = '51'
-            let url = `convenience/api/v1/bmsc/cart/${userId}/clear`
+            let url = `/convenience/api/v1/bmsc/cart/${userId}/clear`
             axios.post(url).then((response) => {
                 this.getCartInfo()
                 this.$emit('cartStatus',1)
@@ -135,6 +135,7 @@ export default {
         },
         // 结算
         settlement(){
+            this.$store.state.creatOrderInfo = this.footerCartInfo
             this.$router.push('/pay')
         }
     }

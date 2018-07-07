@@ -26,9 +26,9 @@
                                     <p class="item-price"><i>￥</i>{{ parseFloat(item.price/100).toFixed(2) }}<span>/{{ utils.unitConvert(item.unit) }}</span></p>
                                 </div>
                             </router-link>
-                            <div class="number-wrap" @click="addCart(item.id)">
+                            <!-- <div class="number-wrap" @click="addCart(item.id)">
                                 <van-icon name="shopping-cart" />
-                            </div>
+                            </div> -->
                         </li>
                     </ul>
                 </div>

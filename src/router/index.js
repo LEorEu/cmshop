@@ -10,7 +10,7 @@ import Category from '@/page/home/category'
 // 购物车
 import Cart from '@/page/cart'
 
-// 商品详情页
+// 商品列表页
 import List from '@/page/shop/list'
 
 // 商品详情页

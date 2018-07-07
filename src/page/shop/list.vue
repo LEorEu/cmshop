@@ -45,12 +45,11 @@ export default {
     methods:{
         // 获取商品列表
         getGoodsList(){
-            let userId = '51'
             let url = '/convenience/api/v1/bmsc/good/listid'
             const categoryId = this.$route.query.id
             let formData = new FormData()
                 formData.append('categoryId',categoryId)
-                formData.append('userId',userId)
+                formData.append('userId',this.$store.state.userId)
             axios.post(url,formData).then((response) => {
                this.items = response.data.result.cResult
             })
@@ -63,9 +62,8 @@ export default {
                 count: num,
                 price: gp
             }
-            let userId = '51'
 
-            let url = `/convenience/api/v1/bmsc/cart/${userId}/insert`
+            let url = `/convenience/api/v1/bmsc/cart/${this.$store.state.userId}/insert`
             let formData = new FormData()
                 formData.append('goodId',data.goodId)
                 formData.append('count',data.count)

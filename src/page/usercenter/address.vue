@@ -120,7 +120,7 @@ export default {
         getAddressList(){
             let url = '/convenience/api/v1/address/list'
             let formData = new FormData()
-            formData.append('userId', '66');
+            formData.append('userId', this.$store.state.userId);
             axios.post(url,formData).then((response) => {
                 this.items = response.data.result
             })
@@ -136,7 +136,7 @@ export default {
                 let url = '/convenience/api/v1/address/update'
                 let formData = new FormData()
                 formData.append('id', '')
-                formData.append('userId', '66')
+                formData.append('userId', this.$store.state.userId)
                 formData.append('userName', this.formDataAdd.userName)
                 formData.append('mobilePhone', this.formDataAdd.mobilePhone)
                 formData.append('address', this.formDataAdd.address)
@@ -160,7 +160,7 @@ export default {
                 let url = '/convenience/api/v1/address/update'
                 let formData = new FormData()
                 formData.append('id', this.formDataEdit.id)
-                formData.append('userId', '66')
+                formData.append('userId', this.$store.state.userId)
                 formData.append('userName', this.formDataEdit.userName)
                 formData.append('mobilePhone', this.formDataEdit.mobilePhone)
                 formData.append('address', this.formDataEdit.address)
