@@ -4,18 +4,18 @@
             <div class="my-header-main">
                 <div class="my-header-avatar">
                     <router-link class="my-header-avatar-img" to="/ucenter/setting">
-                        <img src="https://storage.360buyimg.com/i.imageUpload/6c656f72657531343437313735363535323137_mid.jpg" alt="">
+                        <img :src="userInfo.headImage" alt="">
                     </router-link>
                 </div>
                 <div class="my-header-msg">
-                    <h3 class="my-name">紫金会员WX-SMP128</h3>
+                    <h3 class="my-name">{{ userInfo.nickName }}</h3>
                     <span class="status-info"></span>
                 </div>
-                <!-- <router-link class="my-header-settings" to="/ucenter/setting">
+                <router-link class="my-header-settings" to="/ucenter/setting">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-shezhi"></use>
                     </svg>
-                </router-link> -->
+                </router-link>
             </div>
             <div class="my-header-features flex">
                 <router-link class="my-header-collection item-features" to="/ucenter/collection">
@@ -111,14 +111,12 @@ export default {
     methods:{
         // 获取个人信息
         getUserInfo(){
+            let userId = this.$store.state.userId
             let url = '/convenience/api/v1/bmsc/user/query'
-            let data = {
-                weChat: 'oYd_803OC99apWyFl-Zvm-X9YYcs'
-            }
             let formData = new FormData()
-                formData.append('weChat', 'oYd_803OC99apWyFl-Zvm-X9YYcs');
+                formData.append('id', userId)
             axios.post(url,formData).then((response) => {
-                console.log(response)
+                this.userInfo = response.data.result
             })
         },
         feedback(){
@@ -126,7 +124,7 @@ export default {
         },
         toast(num){
             if( num == 1 ){
-                this.$toast('即将开放！')
+                this.$toast('即将开放！')   
             }else if( num == 2 ){
                 this.feedbackShow = false
                 this.$toast('感谢反馈！')

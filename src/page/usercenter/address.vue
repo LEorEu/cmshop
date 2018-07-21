@@ -118,9 +118,10 @@ export default {
     methods:{
         // 获取地址列表
         getAddressList(){
+            let userId = this.$store.state.userId
             let url = '/convenience/api/v1/address/list'
             let formData = new FormData()
-            formData.append('userId', this.$store.state.userId);
+            formData.append('userId', userId);
             axios.post(url,formData).then((response) => {
                 this.items = response.data.result
             })
@@ -133,10 +134,11 @@ export default {
         // 新增地址
         saveAddress(){
             if(this.formDataAdd.userName && this.formDataAdd.mobilePhone && this.formDataAdd.address){
+                let userId = this.$store.state.userId
                 let url = '/convenience/api/v1/address/update'
                 let formData = new FormData()
                 formData.append('id', '')
-                formData.append('userId', this.$store.state.userId)
+                formData.append('userId', userId)
                 formData.append('userName', this.formDataAdd.userName)
                 formData.append('mobilePhone', this.formDataAdd.mobilePhone)
                 formData.append('address', this.formDataAdd.address)
@@ -157,10 +159,11 @@ export default {
         // 更新地址
         updateAddress(){
             if(this.formDataEdit.userName && this.formDataEdit.mobilePhone && this.formDataEdit.address){
+                let userId = this.$store.state.userId
                 let url = '/convenience/api/v1/address/update'
                 let formData = new FormData()
                 formData.append('id', this.formDataEdit.id)
-                formData.append('userId', this.$store.state.userId)
+                formData.append('userId', userId)
                 formData.append('userName', this.formDataEdit.userName)
                 formData.append('mobilePhone', this.formDataEdit.mobilePhone)
                 formData.append('address', this.formDataEdit.address)

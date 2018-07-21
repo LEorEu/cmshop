@@ -1,6 +1,6 @@
 <template>
     <div class="pay">
-        <div class="pay-address section">
+        <!-- <div class="pay-address section">
             <div class="address-null" v-if="payAddressShow">
                 <a class="add-address" @click="addressBox()">+ 添加收货地址</a>
             </div>
@@ -12,7 +12,7 @@
                 <div class="van-address-list__address">收货地址：{{ payAddress.address }}</div>
                 <van-icon name="arrow" />
             </div>
-        </div>
+        </div> -->
         <div class="pay-order section">
             <div class="section-title">
                 <h2>【订单信息】</h2>
@@ -126,9 +126,10 @@ export default {
             for (let i = 0; i < this.cartInfo.length; i++) {
                 arr.push(this.cartInfo[i].goodId)
             }
+            let userId = this.$store.state.userId
             let url = '/convenience/pay/toPayInit'
             let formData = new FormData()
-                formData.append('userId',this.$store.state.userId)
+                formData.append('userId',userId)
                 formData.append('array',arr)
             axios.post(url,formData).then((response) => {
                 this.loadingShow = false
@@ -157,17 +158,19 @@ export default {
                     "paySign": data.paySign, //微信签名
                 },
                 function (res) {
+                    alert(res.err_msg)
                     if (res.err_msg == "get_brand_wcpay_request:ok") {
-                        console.log('支付成功！')
+                        this.$toast('支付成功！')
+                        this.$router.push('/order')
                     }else{     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-                        alert("支付失败！")
+                        this.$toast('支付失败！')
                     }
                 }
             )
         }
     }
 }
-</script>
+</script>            
 
 <style lang="less" scoped>
 .pay{

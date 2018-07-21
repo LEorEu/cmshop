@@ -254,14 +254,14 @@ export default {
         },
         // 天天特惠
         getIndexOffer(){
-            let url = '/convenience//api/v1/bmsc/good/indexOffer/list'
+            let url = '/convenience/api/v1/bmsc/good/indexOffer/list'
             axios.get(url).then((response) => {
                this.shopOfferList = response.data.result
             })
         },
         // 新鲜来袭
         getIndexNew(){
-            let url = '/convenience//api/v1/bmsc/good/indexNew/list'
+            let url = '/convenience/api/v1/bmsc/good/indexNew/list'
             axios.get(url).then((response) => {
                 this.shopNewList = this.splitArray(response.data.result,3)
             })

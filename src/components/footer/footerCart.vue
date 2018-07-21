@@ -80,7 +80,7 @@ export default {
     methods:{
         // 获取购物车详情
         getCartInfo(){
-            let userId = '51'
+            let userId = this.$store.state.userId
             let url = `/convenience/api/v1/bmsc/cart/${userId}/list`
             axios.post(url).then((response) => {
                this.footerCartInfo = response.data.result
@@ -110,7 +110,7 @@ export default {
                 count: num,
                 price: gp
             }
-            let userId = '51'
+            let userId = this.$store.state.userId
             let url = `/convenience/api/v1/bmsc/cart/${userId}/insert`
             let formData = new FormData()
                 formData.append('goodId',data.goodId)
@@ -125,7 +125,7 @@ export default {
         },
         // 清空购物车
         deleteCart(){
-            let userId = '51'
+            let userId = this.$store.state.userId
             let url = `/convenience/api/v1/bmsc/cart/${userId}/clear`
             axios.post(url).then((response) => {
                 this.getCartInfo()

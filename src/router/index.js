@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+// 登录跳转
+import Link from '@/page/home/link'
+
 // 首页
 import Home from '@/page/home'
 
@@ -24,6 +27,9 @@ import Ucenter from '@/page/usercenter'
 
 // 优惠券
 import Coupon from '@/page/coupon'
+import couponList from '@/page/coupon/list'
+import couponReceive from '@/page/coupon/receive'
+
 
 // 我的地址
 import Address from '@/page/usercenter/address'
@@ -44,7 +50,12 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/home'
+      redirect: '/link'
+    },
+    // 登录跳转
+    {
+      path: '/link',
+      component: Link
     },
     // 首页
     {
@@ -84,7 +95,16 @@ export default new Router({
     // 优惠券
     {
       path: '/coupon',
-      component: Coupon
+      component: Coupon,
+      redirect: '/coupon/list',
+      children: [{
+        path: 'list',
+        component: couponList
+      },
+      {
+        path: 'receive',
+        component: couponReceive
+      }]
     },
     // 我的地址
     {

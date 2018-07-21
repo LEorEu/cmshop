@@ -105,7 +105,8 @@ export default {
                 price: gp
             }
 
-            let url = `/convenience/api/v1/bmsc/cart/${this.$store.state.userId}/insert`
+            let userId = this.$store.state.userId
+            let url = `/convenience/api/v1/bmsc/cart/${userId}/insert`
             let formData = new FormData()
                 formData.append('goodId',data.goodId)
                 formData.append('count',data.count)
@@ -115,11 +116,12 @@ export default {
         },
         // 获取商品详情
         getGoodsInfo(){
+            let userId = this.$store.state.userId
             let url = '/convenience/api/v1/address/queryGood'
             const goodId = this.$route.query.id
             let formData = new FormData()
                 formData.append('goodId',goodId)
-                formData.append('userId',this.$store.state.userId)
+                formData.append('userId',userId)
             axios.post(url,formData).then((response) => {
                this.details = response.data.result
             })

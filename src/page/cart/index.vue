@@ -65,7 +65,8 @@ export default {
   methods: {
     // 获取购物车详情
     getCartInfo(){
-        let url = `/convenience/api/v1/bmsc/cart/${this.$store.state.userId}/list`
+        let userId = this.$store.state.userId
+        let url = `/convenience/api/v1/bmsc/cart/${userId}/list`
         axios.post(url).then((response) => {
             this.goods = response.data.result
         })
@@ -75,7 +76,8 @@ export default {
       this.$dialog.confirm({
         title: '您确定要清空购物车吗',
       }).then(() => {
-        let url = `/convenience/api/v1/bmsc/cart/${this.$store.state.userId}/clear`
+        let userId = this.$store.state.userId
+        let url = `/convenience/api/v1/bmsc/cart/${userId}/clear`
         axios.post(url).then((response) => {
             this.getCartInfo()
         })
