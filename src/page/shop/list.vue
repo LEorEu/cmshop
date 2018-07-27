@@ -15,6 +15,7 @@
                     </router-link>
                     <div class="number-wrap">
                         <el-input-number v-model="item.count" @change="handleChange(item.id,item.goodName,item.count,item.price)" :min="0" label="描述文字"></el-input-number>
+                        <div class="number-mask"></div>
                     </div>
                 </li>
             </ul>
@@ -136,6 +137,14 @@ export default {
                 justify-content:center;
                 align-items:Center;
                 z-index: 99;
+                .number-mask{
+                    position: absolute;
+                    top: 15px;
+                    left: 40px;
+                    width: 40px;
+                    height: 30px;
+                    background: transparent;
+                }
             }
         }
     }

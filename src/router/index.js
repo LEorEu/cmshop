@@ -30,6 +30,8 @@ import Coupon from '@/page/coupon'
 import couponList from '@/page/coupon/list'
 import couponReceive from '@/page/coupon/receive'
 
+// 会员卡
+import Recharge from '@/page/vip/recharge'
 
 // 我的地址
 import Address from '@/page/usercenter/address'
@@ -105,6 +107,11 @@ export default new Router({
         path: 'receive',
         component: couponReceive
       }]
+    },
+    // 我的会员卡
+    {
+      path: '/recharge',
+      component: Recharge,
     },
     // 我的地址
     {

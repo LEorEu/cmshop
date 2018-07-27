@@ -30,7 +30,10 @@
                         <li class="cartview-item clearfix" v-for="(item, index) in footerCartInfo" :key="index">
                             <h5 class="name fl-l">{{ item.goodName }}</h5>
                             <p class="price fl-l">总计：<span>￥{{ parseFloat((item.price*item.count)/100).toFixed(2) }}</span></p>
-                            <el-input-number class="fl-r" v-model="item.count" @change="footerHandleChange(item.goodId,item.goodName,item.count,item.price)" :min="0" label="描述文字"></el-input-number>
+                            <div class="number-wrap fl-r">
+                                <el-input-number v-model="item.count" @change="footerHandleChange(item.goodId,item.goodName,item.count,item.price)" :min="0" label="描述文字"></el-input-number>
+                                <div class="number-mask"></div>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -283,6 +286,17 @@ export default {
                     span{
                         font-size: 16px;
                         color: #ff8134;
+                    }
+                }
+                .number-wrap{
+                    position: relative;
+                    .number-mask{
+                        position: absolute;
+                        top: 0px;
+                        left: 20px;
+                        width: 40px;
+                        height: 24px;
+                        background: transparent;
                     }
                 }
             }

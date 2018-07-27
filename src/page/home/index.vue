@@ -208,6 +208,7 @@ export default {
         this.getNewList()
         this.getIndexOffer()
         this.getIndexNew()
+        console.log(this.$store.state.userId)
     },
     directives: {
         // 自定义获取焦点

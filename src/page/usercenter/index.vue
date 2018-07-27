@@ -65,7 +65,7 @@
 
             <van-cell-group class="my-cate">
                 <van-cell class="my-over my-cate-item" title="我的余额" value="￥0" />
-                <van-cell class="my-vip my-cate-item" title="我的会员" is-link @click="toast(1)" />
+                <van-cell class="my-vip my-cate-item" title="我的会员" to="/recharge" is-link />
                 <van-cell class="my-address my-cate-item" title="地址管理" to="/ucenter/address" is-link />
                 <van-cell class="feedback my-cate-item" title="意见反馈" is-link @click="feedback()" />
                 <van-cell class="about-us my-cate-item" title="关于我们" to="/home/aboutus" />
@@ -123,9 +123,7 @@ export default {
             this.feedbackShow = true
         },
         toast(num){
-            if( num == 1 ){
-                this.$toast('即将开放！')   
-            }else if( num == 2 ){
+            if( num == 2 ){
                 this.feedbackShow = false
                 this.$toast('感谢反馈！')
             }

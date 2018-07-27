@@ -3,20 +3,25 @@
         <div class="goods-silder">
             <van-swipe :autoplay="3000">
                 <van-swipe-item>
-                    <!-- 开发环境下需执行testImgUrl方法 -->
-                    <!-- <img :src="testImgUrl(img.replace(/\\/g,'/'))" /> -->
                     <img src="../../../static/images/goods-test-img.jpg" />
                 </van-swipe-item>
+                <van-swipe-item>
+                    <!-- 开发环境下需执行testImgUrl方法 -->
+                    <img :src="utils.testImgUrl(details.goodImage.replace(/\\/g,'/'))" />
+                </van-swipe-item>
             </van-swipe>
-            <div class="other-btn">
+            <!-- <div class="other-btn">
                 <div class="collection-btn">
                     <van-icon name="like-o" />
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="goods-main">
             <div class="goods-buy flex">
                 <div class="buy-info">
+                    <div class="module-wrap clearfix">
+                        <h2 class="title fl-l">{{ details.goodName }}</h2>
+                    </div>
                     <div class="module-wrap clearfix">
                         <div class="price fl-l">
                             <span>￥</span>{{ parseFloat(details.price/100).toFixed(2) }}<i> /{{ utils.unitConvert(details.unit) }}</i>
@@ -25,13 +30,10 @@
                             <p>销量：{{ details.sales }}</p>
                         </div>
                     </div>
-                    <div class="module-wrap clearfix">
-                        <h2 class="title fl-l">{{ details.goodName }}</h2>
-                        <!-- <span class="desc fl-l">(1斤约20个)</span> -->
-                    </div>
                 </div>
                 <div class="number-wrap">
                     <el-input-number v-model="details.count" @change="handleChange(details.id,details.goodName,details.count,details.price)" :min="0"></el-input-number>
+                    <div class="number-mask"></div>
                 </div>
             </div>
             <div class="goods-service">
@@ -227,10 +229,19 @@ export default {
                 }
             }
             .number-wrap{
+                position: relative;
                 width: 100px;
                 display: flex;
                 justify-content:center;
                 align-items:Center;
+                .number-mask{
+                    position: absolute;
+                    top: 13px;
+                    left: 30px;
+                    width: 40px;
+                    height: 30px;
+                    background: transparent;
+                }
             }
         }
         .goods-service{

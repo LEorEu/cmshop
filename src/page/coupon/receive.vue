@@ -9,11 +9,11 @@
                 </div>
                 <div class="item-right">
                     <h2 class="coupon-price">{{ item.price }}<span>元</span></h2>
-                    <router-link class="coupon-btn" to="">立即使用</router-link>
+                    <router-link class="coupon-btn" to="/category">立即使用</router-link>
                 </div>
             </li>
         </ul>
-    </div>
+             </div>
 </template>
 
 <script>
@@ -75,7 +75,7 @@ export default {
             width: 30%;
             .coupon-price{
                 margin-top: 5px;
-                font-size: 32px;
+                font-size: 30px;
                 text-align: center;
                 color: #fff;
                 span{
