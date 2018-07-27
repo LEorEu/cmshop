@@ -127,7 +127,7 @@ export default {
                 arr.push(this.cartInfo[i].goodId)
             }
             let userId = this.$store.state.userId
-            let url = '/convenience/pay/toPayInit'
+            let url = '/convenience/api/v1/pay/toPayInit'
             let formData = new FormData()
                 formData.append('userId',userId)
                 formData.append('array',arr)
@@ -148,6 +148,7 @@ export default {
         },
         //调用微信支付页面
         onBridgeReady(data) {
+            let _this=this
             WeixinJSBridge.invoke(
                 'getBrandWCPayRequest', {
                     "appId": data.unifiedOrderRequest.appid,     //公众号名称，由商户传入     
@@ -158,12 +159,11 @@ export default {
                     "paySign": data.paySign, //微信签名
                 },
                 function (res) {
-                    alert(res.err_msg)
                     if (res.err_msg == "get_brand_wcpay_request:ok") {
-                        this.$toast('支付成功！')
-                        this.$router.push('/order')
+                        _this.$toast.success('支付成功！')
+                        _this.$router.push('/order')
                     }else{     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-                        this.$toast('支付失败！')
+                        _this.$toast.fail('支付失败！')
                     }
                 }
             )
@@ -237,9 +237,13 @@ export default {
                 padding-bottom: 10px;
                 border-bottom: 1px solid #f8f8f8;
                 .goods-img{
+                    overflow: hidden;
                     width: 62px;
                     height: 62px;
                     border: 1px solid #f8f8f8;
+                    display: flex;
+                    justify-content:center;
+                    align-items:Center;
                 }
                 .goods-text{
                     margin-left: 20px;

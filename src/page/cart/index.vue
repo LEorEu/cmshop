@@ -51,8 +51,10 @@ export default {
           num: 0,
           price: 0
       }
+      let arr = []
       let len = this.checkedGoods.length
       for(var i = 0; i < len; i++){
+          arr.push(this.checkedGoods[i].goodId)
           total.num += parseInt(this.checkedGoods[i].count)
           total.price += parseInt(this.checkedGoods[i].count * this.checkedGoods[i].price)
       }

@@ -31,23 +31,25 @@ import couponList from '@/page/coupon/list'
 import couponReceive from '@/page/coupon/receive'
 
 // 会员卡
+import Vip from '@/page/vip'
 import Recharge from '@/page/vip/recharge'
+import vipPwd from '@/page/vip/pwd'
 
 // 我的地址
 import Address from '@/page/usercenter/address'
 
 // 我的订单
 import Order from '@/page/order'
-import orderAll from '../page/order/orderAll'
-import sendItem from '../page/order/sendItem'
-import acceptItem from '../page/order/acceptItem'
-import commentItem from '../page/order/commentItem'
+import orderAll from '@/page/order/orderAll'
+import sendItem from '@/page/order/sendItem'
+import acceptItem from '@/page/order/acceptItem'
+import commentItem from '@/page/order/commentItem'
 
 Vue.use(Router)
 
 export default new Router({
   mode: 'hash',
-  base: '/cmshops/',
+  base: '/test/',
   // mode: 'history',
   routes: [
     {
@@ -110,8 +112,17 @@ export default new Router({
     },
     // 我的会员卡
     {
-      path: '/recharge',
-      component: Recharge,
+      path: '/vip',
+      component: Vip,
+      redirect: '/vip/recharge',
+      children: [{
+        path: 'recharge',
+        component: Recharge
+      },
+      {
+        path: 'pwd',
+        component: vipPwd
+      }]
     },
     // 我的地址
     {

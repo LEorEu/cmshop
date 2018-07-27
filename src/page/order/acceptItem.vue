@@ -61,7 +61,6 @@ export default {
             axios.get(url).then((response) => {
                 this.orderList = this.dataTreating(response.data.result)
             })
-            this.orderList=this.dataTreating(res);
         },
         //数据处理
         dataTreating(data={}){

@@ -65,10 +65,10 @@
 
             <van-cell-group class="my-cate">
                 <van-cell class="my-over my-cate-item" title="我的余额" value="￥0" />
-                <van-cell class="my-vip my-cate-item" title="我的会员" to="/recharge" is-link />
+                <van-cell class="my-vip my-cate-item" title="我的会员" to="/vip" is-link />
                 <van-cell class="my-address my-cate-item" title="地址管理" to="/ucenter/address" is-link />
                 <van-cell class="feedback my-cate-item" title="意见反馈" is-link @click="feedback()" />
-                <van-cell class="about-us my-cate-item" title="关于我们" to="/home/aboutus" />
+                <van-cell class="about-us my-cate-item" title="关于我们" @click="aboutUs()" />
             </van-cell-group>
         </div>
         <van-actionsheet v-model="feedbackShow" title="意见反馈">
@@ -122,11 +122,8 @@ export default {
         feedback(){
             this.feedbackShow = true
         },
-        toast(num){
-            if( num == 2 ){
-                this.feedbackShow = false
-                this.$toast('感谢反馈！')
-            }
+        aboutUs(){
+            window.location.href = 'http://xy.czzhdc.com/cmweb/#/marketdetails'
         }
     }
 }

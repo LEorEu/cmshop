@@ -153,6 +153,7 @@ export default {
                     border-top: 2px solid #fafafa;
                     background-color: #fff;
                     .item-img{
+                        overflow: hidden;
                         width: 90px;
                         height: 90px;
                         border: 1px solid #fafafa;

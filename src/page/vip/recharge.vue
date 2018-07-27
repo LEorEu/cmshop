@@ -6,7 +6,7 @@
         <div class="recharge-over">
             <h2 class="over">{{ over/100 }} <p>元</p></h2>
             <span>账户余额</span>
-            <router-link class="pwd" to="/recharge/pwd" v-show="vipStatus">修改密码</router-link>
+            <router-link class="pwd" to="/vip/pwd" v-show="vipStatus">修改密码</router-link>
         </div>
         <div class="recharge-main">
             <div class="recharge-list">
@@ -18,8 +18,8 @@
                 </ul>
             </div>
             <div class="recharge-btns">
-                <button class="submit-btn" :disabled="disabled" :class="{ 'disable' : disabled }" @click="onSubmit(focusPrice)">立即充值</button>
-                <span class="submit-tips">点击立即充值代表您已阅读并同意<router-link to="/recharge/tips">《购卡须知》</router-link> </span>
+                <button class="submit-btn" :disabled="disabled" :class="{ 'disable' : disabled }" @click="onSubmit(focusId)">立即充值</button>
+                <span class="submit-tips">点击立即充值代表您已阅读并同意<router-link to="/vip/tips">《购卡须知》</router-link> </span>
             </div>
             <div class="recharge-tips">
                 <h2>温馨提示：</h2>
@@ -47,7 +47,6 @@ export default {
             vipStatus: false,   //会员卡状态
             cardList: [],       //会员卡充值价格列表
             focusId: '',        //焦点充值卡ID
-            focusPrice: '',     //焦点充值卡价格
             disabled: true     //submit控制
         }
     },
@@ -72,40 +71,29 @@ export default {
             })
         },
         // 提交数据
-        onSubmit(price){
+        onSubmit(id){
             let userId = this.$store.state.userId
-            let url = '/convenience/pay/toPayInit2'
+            let url = '/convenience/api/v1/pay/toPayInit2'
             let formData = new FormData()
                 formData.append('userId',userId)
                 formData.append('id', this.focusId)
             axios.post(url,formData).then((response) => {
                 let data = response.data
-                console.log(data)
-                // if (typeof WeixinJSBridge == "undefined"){
-                //     if( document.addEventListener ){
-                //         document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady, false);
-                //     }else if (document.attachEvent){
-                //         document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady)
-                //         document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady)
-                //     }
-                // }else{
-                //     this.onBridgeReady(data)
-                // }
-            })
-        },
-        //充值
-        cardRecharge(){
-            let url = '/convenience/api/v1/bmsc/card/recharge'
-            let userId = this.$store.state.userId
-            let formData = new FormData()
-                formData.append('balance',price)
-                formData.append('userId',userId)
-            axios.post(url,formData).then((response) => {
-                console.log(response)
+                if (typeof WeixinJSBridge == "undefined"){
+                    if( document.addEventListener ){
+                        document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady, false);
+                    }else if (document.attachEvent){
+                        document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady)
+                        document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady)
+                    }
+                }else{
+                    this.onBridgeReady(data,id)
+                }
             })
         },
         //调用微信支付页面
-        onBridgeReady(data) {
+        onBridgeReady(data,id) {
+            let _this=this
             WeixinJSBridge.invoke(
                 'getBrandWCPayRequest', {
                     "appId": data.unifiedOrderRequest.appid,     //公众号名称，由商户传入     
@@ -116,19 +104,34 @@ export default {
                     "paySign": data.paySign, //微信签名
                 },
                 function (res) {
-                    alert(res.err_msg)
-                    if (res.err_msg == "get_brand_wcpay_request:ok") {
-                        this.$toast('支付成功！')
+                    if (res.err_msg == 'get_brand_wcpay_request:ok') {
+                        _this.cardRecharge(id)
                     }else{     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-                        this.$toast('支付失败！')
+                        _this.$toast.fail('支付失败！')
                     }
                 }
             )
         },
+        //充值
+        cardRecharge(id){
+            let url = '/convenience/api/v1/bmsc/card/recharge'
+            let userId = this.$store.state.userId
+            let formData = new FormData()
+                formData.append('id',id)
+                formData.append('userId',userId)
+            axios.post(url,formData).then((response) => {
+                console.log(response)
+                if(response.data.status == 200){
+                    this.$toast.success('充值成功！')
+                    this.getCardList()
+                }else{
+                    this.$toast.fail('充值失败！请联系客服')
+                }
+            })
+        },
         // 焦点切换
-        cardFocus(id,price){
+        cardFocus(id){
             this.focusId = id
-            this.focusPrice = price
             this.disabled = false
         },
     }

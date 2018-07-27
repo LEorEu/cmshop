@@ -91,6 +91,7 @@ export default {
             padding: 10px;
             border-bottom: 2px solid #fafafa;
             .item-img{
+                overflow: hidden;
                 width: 90px;
                 height: 90px;
                 border: 1px solid #fafafa;

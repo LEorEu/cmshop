@@ -171,6 +171,9 @@ img {
     border-color: #ff8334;
     background-color: #ff8334;
 }
+.van-card__thumb{
+    overflow: hidden;
+}
 
 /* vant 购物车样式 */
 .cart .card-goods__item{
