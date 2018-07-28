@@ -28,6 +28,9 @@
                 <p>3.若充值长时间未到账，请及时联系客服：0355-624152；</p>
             </div>
         </div>
+        <van-popup v-model="show" position="bottom">
+            <set-pwd></set-pwd>
+        </van-popup>
         <shop-footer></shop-footer>
     </div>
 </template>
@@ -35,11 +38,13 @@
 <script>
 import axios from 'axios'
 
+import setPwd from '../../components/common/setPwd'
 import shopFooter from '../../components/footer/footer'
 
 export default {
     components: {
-        'shop-footer': shopFooter
+        'shop-footer': shopFooter,
+        'set-pwd': setPwd
     },
     data(){
         return{
@@ -47,7 +52,8 @@ export default {
             vipStatus: false,   //会员卡状态
             cardList: [],       //会员卡充值价格列表
             focusId: '',        //焦点充值卡ID
-            disabled: true     //submit控制
+            disabled: true,    //submit控制
+            show: true          //设置密码弹窗
         }
     },
     mounted(){

@@ -47,6 +47,7 @@ export default {
   computed: {
     // 购物车计算总价
 		cartTotal(){
+      console.log(this.checkedGoods)
       let total = {
           num: 0,
           price: 0

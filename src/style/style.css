@@ -289,3 +289,25 @@ img {
     background-color: rgba(0, 0, 0, .5);
     z-index: 999;
 }
+.van-password-input [class*=van-hairline]::after{
+    border-color: #ff8334;
+}
+.set-pwd-content .van-cell[class*=van-hairline]::after {
+    left: 0;
+    width: 100%;
+    border-color: #ff8334;
+    border-radius: 6px;
+    border-width: 1px;
+}
+.set-pwd-content .van-cell__title{
+    padding-left: 20px;
+    line-height: 50px;
+}
+.set-pwd-content .van-cell__title span{
+    font-size: 16px;
+    color: #333;
+}
+.set-pwd-content .van-field__control{
+    height: 50px;
+    font-size: 16px;
+}

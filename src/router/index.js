@@ -34,6 +34,7 @@ import couponReceive from '@/page/coupon/receive'
 import Vip from '@/page/vip'
 import Recharge from '@/page/vip/recharge'
 import vipPwd from '@/page/vip/pwd'
+import successPwd from '@/page/vip/successPwd'
 
 // 我的地址
 import Address from '@/page/usercenter/address'
@@ -122,6 +123,10 @@ export default new Router({
       {
         path: 'pwd',
         component: vipPwd
+      },
+      {
+        path: 'successPwd',
+        component: successPwd
       }]
     },
     // 我的地址
