@@ -119,7 +119,6 @@ export default {
         // 监听数据完整度
         listenStatus(){
             if(this.phone.length == 11 && this.sms.length == 4 && this.pwd.length == 6 && this.qrpwd.length == 6){
-                console.log(this.pwd,this.qrpwd)
                 if(this.pwd == this.qrpwd){
                     this.nextDisabled = false
                 }

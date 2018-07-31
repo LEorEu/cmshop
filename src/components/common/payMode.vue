@@ -79,12 +79,12 @@ export default {
             if(this.pwd.length == 6){
                 this.showKeyboard = false
                 this.show = false
+                this.$emit('childMaskTo',true)
             }
         },
         // 监听总价变化
         childTotal(val){
             this.amount = val
-            console.log(1)
         },
     },
     methods: {

@@ -61,7 +61,6 @@ export default {
             let url = `/convenience/api/v1/bmsc/order/${userId}/0000/list`
             axios.get(url).then((response) => {
                 this.orderList = this.dataTreating(response.data.result)
-                console.log(this.orderList)
             })
         },
         //数据处理

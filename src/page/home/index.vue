@@ -69,18 +69,18 @@
                     </van-swipe>
                 </div>
                 <div class="topic-more fl-r">
-                    <router-link to="/news">更多</router-link>
+                    <router-link to="">更多</router-link>
                 </div>
             </div>
             <div class="home-favorable flex">
                 <div class="member-card">
-                    <router-link to="">
+                    <router-link to="/vip">
                         <img src="../../../static/images/member-card.png" alt="member-card">
                     </router-link>
                     
                 </div>
                 <div class="coupon">
-                    <router-link to="">
+                    <router-link to="/coupon">
                         <img src="../../../static/images/coupon.png" alt="coupon">
                     </router-link>
                 </div>
@@ -208,7 +208,6 @@ export default {
         this.getNewList()
         this.getIndexOffer()
         this.getIndexNew()
-        console.log(this.$store.state.userId)
     },
     directives: {
         // 自定义获取焦点

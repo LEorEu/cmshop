@@ -80,8 +80,8 @@
             <pay-coupon @couponId="selectCoupon"></pay-coupon>
         </van-popup>
         <!-- 付款方式 -->
-        <van-popup class="paymode-box" v-model="paymodeBoxShow" position="bottom" :overlay="true">
-            <pay-mode @wxPay="onSubmit" @close="paymodeBoxShow = false" :child-total="cartTotal.actualTotal"></pay-mode>
+        <van-popup class="paymode-box" v-model="paymodeBoxShow" position="bottom" :overlay="true" @click-overlay="maskTo()">
+            <pay-mode @wxPay="onSubmit" @close="paymodeBoxShow = false"  @childMaskTo="maskStatus" :child-total="cartTotal.actualTotal"></pay-mode>
         </van-popup>
         <!-- loading -->
         <van-loading color="black" v-show="loadingShow" />
@@ -114,6 +114,7 @@ export default {
             paymodeBoxShow: false,      //付款方式弹窗显示
             goodsInfo: '',              //订单信息
             loadingShow: false,         //
+            maskPayStatus: false,       //蒙层状态
             cartInfo: []                //购物车传递过来的数据
         }
     },
@@ -307,6 +308,15 @@ export default {
                     this.$toast.fail('创建订单失败请联系管理员！')
                 }
             })
+        },
+        // 点击蒙层跳转
+        maskStatus(msg){
+            this.maskPayStatus = true
+        },
+        maskTo(){
+            if(this.maskPayStatus == true){
+                this.$router.push('/home')
+            }
         }
     }
 }
