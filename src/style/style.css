@@ -241,12 +241,14 @@ img {
 .el-input-number__decrease {
     border-radius: 100%;
     border: 1px solid #ff8334;
+    font-size: 14px;
     background: transparent;
     color: #ff8334;
 }
 .el-input-number__increase{
     border-radius: 100%;
-    border-left: 0;
+    border: 1px solid #ff8334;
+    font-size: 14px;
     background: #ff8334;
     color: #fff;
 }
@@ -263,14 +265,19 @@ img {
     color: #fff;
 }
 .goods-list .el-input__inner{
+    margin-top: 2px;
     line-height: 30px;
+}
+.goods-list [class*=" el-icon-"], [class^=el-icon-]{
+    position: relative;
+    top: 1px;
 }
 .cartview .el-input-number {
     width: 80px;
     line-height: 20px;
 }
 .cartview .el-input-number__decrease, .cartview .el-input-number__increase {
-    width: 20px;
+    width: 22px;
 }
 .cartview .el-input-number .el-input__inner {
     padding-left: 20px;
@@ -310,4 +317,40 @@ img {
 .set-pwd-content .van-field__control{
     height: 50px;
     font-size: 16px;
+}
+.pay .address .van-radio__input{
+    left: 20px;
+}
+.pay .van-radio .van-icon-checked{
+    color: #ff8334;
+}
+.pay .pay-mode .van-icon{
+    margin-right: 15px;
+    font-size: 24px;
+}
+.pay .pay-mode .van-icon-wechat{
+    line-height: 30px;
+    color: #2bcb50;
+}
+.pay .pay-mode .van-icon-credit-pay{
+    line-height: 30px;
+    color: #ff8334;
+}
+.pay .pay-mode .van-icon-check{
+    margin-right: 0px;
+    line-height: 30px;
+}
+.pay .pay-mode .van-icon-checked{
+    margin-right: 0px;
+    line-height: 30px;
+}
+.pay .pay-mode .van-cell__title span{
+    line-height: 30px;
+    font-size: 16px;
+}
+.pay .pay-mode .van-radio__input{
+    height: auto;
+}
+.pay .pay-mode .van-cell__value{
+    position: relative;
 }

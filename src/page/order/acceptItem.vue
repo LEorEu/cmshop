@@ -26,7 +26,7 @@
                     <div class="item-btn">
                         <!-- 待收货 -->
                         <div class="status-acceptItem clearfix" v-if="order.goods[0].status == '0009'">
-                            <van-button class="fl-r" size="small">确认收货</van-button>
+                            <van-button class="fl-r" size="small" @click="onReceipt(order.orderNo)">确认收货</van-button>
                         </div>
                     </div>
                 </div>
@@ -75,6 +75,19 @@ export default {
                     })
                 }
                 return item
+            })
+        },
+        onReceipt(id){
+            let url = `/convenience/api/v1/bmsc/order/updateStatus`
+            let formData = new FormData()
+                formData.append('orderNo', id)
+            axios.post(url,formData).then((response) => {
+                if(response.data.status == 200){
+                    this.$toast('确认收货成功')
+                    this.getOrderList()
+                }else{
+                    this.$toast('确认收货失败')
+                }
             })
         }
     }

@@ -66,6 +66,7 @@ export default {
 <style lang="less" scoped>
 .coupon-list{
     padding: 10px;
+    padding-bottom: 60px;
     background-color: #f3f3f3;
     .coupon-item{
         margin-bottom: 20px;

@@ -3,18 +3,20 @@
         <h2 class="address-title">地址管理</h2>
         <div class="van-address-list">
             <ul class="van-cell-group van-hairline--top-bottom">
-                <van-radio-group v-model="radio" @change="selectAdd()">
+                <van-radio-group v-model="radio" disabled>
                     <li class="van-cell van-cell--clickable van-hairline" v-for="(item, index) in items" :key="index">
-                        <van-radio :name="item.id">
-                            <div class="van-cell__value van-cell__value--alone">
-                                <div class="van-radio">
-                                    <div class="van-radio__label">
-                                        <div class="van-address-list__name">{{ item.userName }}&nbsp;&nbsp;{{ item.mobilePhone }}</div>
-                                        <div class="van-address-list__address">收货地址：{{ item.address }}</div>
+                        <div class="select-radio" @click="test(item)">
+                            <van-radio :name="item.id">
+                                <div class="van-cell__value van-cell__value--alone">
+                                    <div class="van-radio">
+                                        <div class="van-radio__label">
+                                            <div class="van-address-list__name">{{ item.userName }}&nbsp;&nbsp;{{ item.mobilePhone }}</div>
+                                            <div class="van-address-list__address">收货地址：{{ item.address }}</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </van-radio>
+                            </van-radio>
+                        </div>
                         <van-icon class="van-address-list__edit" name="edit" @click="showEdit(item)" />
                     </li>
                 </van-radio-group>
@@ -120,15 +122,8 @@ export default {
         this.getAddressList()
     },
     methods:{
-        // 选择地址
-        selectAdd(){
-            let add = ''
-            for(let i in this.items){
-                if(this.items[i].id==this.radio){
-                    add = this.items[i]
-                    break
-                }
-            }
+        test(add){
+            this.radio = add.id
             this.$emit('addressId',add)
         },
         // 获取地址列表
@@ -167,6 +162,12 @@ export default {
                 axios.post(url,formData).then((response) => {
                     if(response.data.status == 200){
                         this.$toast('新增成功')
+                        this.formDataAdd = {
+                            userName: '',
+                            mobilePhone: '',
+                            address: '',
+                            visible: false
+                        }
                         this.getAddressList()
                         this.addShow = false
                     }else{
@@ -301,7 +302,9 @@ export default {
 }
 .van-address-list{
     .van-cell{
-        padding: 20px 15px;
+        .select-radio{
+            padding: 10px 0px;
+        }
     }
 }
 .van-address-list .van-radio__label {

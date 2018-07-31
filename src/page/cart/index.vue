@@ -71,7 +71,6 @@ export default {
       for(let i in this.checkedGoods){
         arr.push(this.checkedGoods[i].goodId)
       }
-      console.log(arr)
     },
     // 获取购物车详情
     getCartInfo(){

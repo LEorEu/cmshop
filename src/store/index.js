@@ -7,7 +7,7 @@ Vue.use(Vuex)
 
 const state = {
     creatOrderInfo: [],
-    userId : '79'
+    userId : ''
 }
 
 export default new Vuex.Store({

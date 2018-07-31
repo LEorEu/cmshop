@@ -36,7 +36,7 @@ let utils={
     },
     // 开发环境需执行此方法以便显示正确图片路径
     testImgUrl(url){
-        let testUrl = `http://39.106.27.49${url}`
+        let testUrl = `http://xy.czzhdc.com${url}`
         return testUrl
     }
 }

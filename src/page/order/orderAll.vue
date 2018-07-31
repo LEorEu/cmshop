@@ -60,8 +60,8 @@ export default {
             let userId = this.$store.state.userId
             let url = `/convenience/api/v1/bmsc/order/${userId}/0000/list`
             axios.get(url).then((response) => {
-                console.log(response.data.result)
                 this.orderList = this.dataTreating(response.data.result)
+                console.log(this.orderList)
             })
         },
         //数据处理

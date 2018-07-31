@@ -9,11 +9,11 @@
                 </div>
                 <div class="item-right">
                     <h2 class="coupon-price">{{ item.price/100 }}<span>元</span></h2>
-                    <router-link class="coupon-btn" to="/category">立即使用</router-link>
+                    <a class="coupon-btn" @click="couponSelect(item)">立即使用</a>
                 </div>
             </li>
         </ul>
-             </div>
+    </div>
 </template>
 
 <script>
@@ -37,7 +37,11 @@ export default {
             axios.post(url,formData).then((response) => {
                 this.items = response.data
             })
-        }
+        },
+        // 使用优惠券
+        couponSelect(item){
+            this.$emit('couponId',item)
+        },
     }
 }
 </script>

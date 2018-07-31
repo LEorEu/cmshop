@@ -20,13 +20,13 @@
             <div class="my-header-features flex">
                 <router-link class="my-header-collection item-features" to="/vip">
                     <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-shezhi"></use>
+                        <use xlink:href="#icon-huiyuanqia"></use>
                     </svg>
                     <p>我的会员</p>
                 </router-link>
                 <router-link class="my-header-coupon item-features" to="/coupon">
                     <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-shezhi"></use>
+                        <use xlink:href="#icon-youhuiquan"></use>
                     </svg>
                     <p>优惠券</p>
                 </router-link>
@@ -203,16 +203,16 @@ export default {
         .my-header-features{
             background-color: rgba(255,255,255,.2);
             .item-features{
+                display: flex;
                 margin: 10px 0px;
                 width:50%;
-                text-align: center;
+                justify-content:center;
                 .icon{
-                    display: inline-block;
-                    font-size: 14px;
+                    font-size: 26px;
                     color: #fff;
                 }
                 p{
-                    display: inline-block;
+                    margin-top: 3px;
                     margin-left: 5px;
                     font-size: 14px;
                     color: #fff;
@@ -233,7 +233,7 @@ export default {
                     width: 25%;
                     text-align: center;
                     .icon{
-                        height: 26px;
+                        height: 20px;
                         font-size: 24px;
                         color: #999;
                     }

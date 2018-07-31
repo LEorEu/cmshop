@@ -1,5 +1,6 @@
 <template>
     <div class="pay">
+        <!-- 收货地址 -->
         <div class="pay-address section">
             <div class="address-null" v-if="payAddressShow">
                 <a class="add-address" @click="addressBox()">+ 添加收货地址</a>
@@ -13,6 +14,7 @@
                 <van-icon name="arrow" />
             </div>
         </div>
+        <!-- 订单信息 -->
         <div class="pay-order section">
             <div class="section-title">
                 <h2>【订单信息】</h2>
@@ -32,10 +34,11 @@
                 </ul>
             </div>
         </div>
+        <!-- 支付表单 -->
         <div class="pay-form section"> 
             <van-cell-group>
                 <van-cell class="service-time" title="送达时间" value="预计60分钟左右送达" />
-                <van-cell class="my-vip my-cate-item" title="优惠券" :value="coupon" is-link />
+                <van-cell class="my-vip my-cate-item" title="优惠券" :value="couponText" is-link @click="couponBox()" />
                 <van-field
                     v-model="remark"
                     type="textarea"
@@ -46,10 +49,11 @@
                 />
             </van-cell-group>
         </div>
+        <!-- 订单统计 -->
         <div class="pay-total section">
             <div class="total-text clearfix">
                 <p class="fl-l">商品总价</p>
-                <p class="fl-r">￥{{ parseFloat(cartTotal/100).toFixed(2) }}</p>
+                <p class="fl-r">￥{{ parseFloat(cartTotal.goodsTotal/100).toFixed(2) }}</p>
             </div>
             <div class="total-text clearfix">
                 <p class="fl-l">快递费</p>
@@ -57,19 +61,30 @@
             </div>
             <div class="total-text clearfix">
                 <p class="fl-l">优惠券</p>
-                <p class="fl-r">-￥0.00</p>
+                <p class="fl-r">-￥{{ parseFloat(couponPrice/100).toFixed(2) }}</p>
             </div>
         </div>
+        <!-- 提交 -->
         <van-submit-bar
-            :price="cartTotal"
+            :price="cartTotal.actualTotal"
             label="实付款："
             button-text="去付款"
-            @submit="onSubmit"
+            @submit="payShow"
         />
-        <van-loading color="black" v-show="loadingShow" />
+        <!-- 地址模块 -->
         <van-popup class="address-box" v-model="addressBoxShow" position="bottom" :overlay="false">
             <pay-address @addressId="selectAdd"></pay-address>
         </van-popup>
+        <!-- 优惠券模块 -->
+        <van-popup class="coupon-box" v-model="couponBoxShow" position="bottom" :overlay="false">
+            <pay-coupon @couponId="selectCoupon"></pay-coupon>
+        </van-popup>
+        <!-- 付款方式 -->
+        <van-popup class="paymode-box" v-model="paymodeBoxShow" position="bottom" :overlay="true">
+            <pay-mode @wxPay="onSubmit" @close="paymodeBoxShow = false" :child-total="cartTotal.actualTotal"></pay-mode>
+        </van-popup>
+        <!-- loading -->
+        <van-loading color="black" v-show="loadingShow" />
     </div>
 </template>
 
@@ -77,18 +92,26 @@
 import axios from 'axios'
 
 import payAddress from '../../components/common/payAddress'
+import payCoupon from '../../components/common/payCoupon'
+import payMode from '../../components/common/payMode'
 
 export default {
     components: {
-        'pay-address': payAddress
+        'pay-address': payAddress,
+        'pay-coupon': payCoupon,
+        'pay-mode': payMode
     },
     data(){
         return{
-            payAddress: '',             //地址
+            payAddress: '',             //地址信息
             payAddressShow: false,      //地址状态切换
             addressBoxShow: false,      //地址弹窗显示
-            coupon: '(暂无可用)',       //优惠券
+            coupon: '',                 //优惠券信息
+            couponPrice: 0,            //优惠券价格
+            couponText: '(暂无可用)',    //优惠券显示文字
+            couponBoxShow: false,       //优惠券弹窗显示
             remark: '',                 //备注
+            paymodeBoxShow: false,      //付款方式弹窗显示
             goodsInfo: '',              //订单信息
             loadingShow: false,         //
             cartInfo: []                //购物车传递过来的数据
@@ -97,14 +120,28 @@ export default {
     mounted(){
         this.initData()
         this.initAddress()
+        this.initCoupon()
     },
     computed: {
         // 计算总价
         cartTotal(){
-            let total = 0
+            let total = {}
+            let goodsTotal = 0
+            let actualTotal = 0
             let len = this.cartInfo.length
             for(var i = 0; i < len; i++){
-                total += parseInt(this.cartInfo[i].count * this.cartInfo[i].price)
+                goodsTotal += parseInt(this.cartInfo[i].count * this.cartInfo[i].price)
+            }
+            total = {
+                goodsTotal: goodsTotal,
+                actualTotal: goodsTotal - this.couponPrice
+            }
+            if(total.actualTotal < 0){
+                this.$dialog.alert({
+                    message: '系统错误，请联系管理员'
+                }).then(() => {
+                    this.$router.push('/cart')
+                })
             }
             return total
         }
@@ -121,15 +158,6 @@ export default {
                 })
             }
         },
-        // 更新地址信息
-        selectAdd(msg){
-            if(this.payAddress.id == msg.id){
-                this.addressBoxShow = false
-            }else{
-                this.payAddress = msg
-                this.addressBoxShow = false
-            }
-        },
         // 地址显示
         initAddress(){
             let userId = this.$store.state.userId
@@ -143,44 +171,97 @@ export default {
                     this.payAddressShow = false
                     this.payAddress = response.data.result
                     for(let i in this.payAddress){
-                        if(this.payAddress[i].visible==true){
+                        if(this.payAddress[i].visible == true){
                             this.payAddress = this.payAddress[i]
+                            break
+                        }else{
+                            this.payAddress = this.payAddress[0]
                             break
                         }
                     }
                 }
             })
         },
+        // 更新地址信息
+        selectAdd(msg){
+            this.payAddress = msg
+            this.initAddress()
+            this.addressBoxShow = false
+        },
         // 地址弹窗显示
         addressBox(){
             this.addressBoxShow = true
         },
-        // 提交数据
-        onSubmit(){
-            this.loadingShow = true
-            let arr = []
-            for (let i = 0; i < this.cartInfo.length; i++) {
-                arr.push(this.cartInfo[i].goodId)
-            }
-            let userId = this.$store.state.userId
-            let url = '/convenience/api/v1/pay/toPayInit'
+        // 优惠券状态
+        initCoupon(){
+            let url = '/convenience/api/v1/bmsc/couponperson/query'
             let formData = new FormData()
-                formData.append('userId',userId)
-                formData.append('array',arr)
+                formData.append('userId',this.$store.state.userId)
             axios.post(url,formData).then((response) => {
-                this.loadingShow = false
-                let data = response.data
-                if (typeof WeixinJSBridge == "undefined"){
-                    if( document.addEventListener ){
-                        document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady, false);
-                    }else if (document.attachEvent){
-                        document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady)
-                        document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady)
-                    }
+                if(response.data.length > 0){
+                    this.couponText = `${response.data.length}个可用`
                 }else{
-                    this.onBridgeReady(data)
+                    this.couponText = '(暂无可用)'
                 }
             })
+        },
+        // 优惠券弹窗显示
+        couponBox(){
+            this.couponBoxShow = true
+        },
+        // 选择优惠券
+        selectCoupon(msg){
+            this.coupon = msg
+            this.couponPrice = msg.price
+            this.couponText = `- ￥ ${parseFloat(this.couponPrice/100).toFixed(2)}`
+            this.couponBoxShow = false
+        },
+        // 提交数据
+        payShow(){
+            // 处理地址是否为空
+            if(this.payAddress.id == undefined){
+                this.$toast('请先添加地址')
+            }else{
+                this.paymodeBoxShow = true
+            }
+        },
+        // 提交数据
+        onSubmit(boolean){
+            if(boolean == true){
+                // 处理优惠券是否为空
+                let couponId = ''
+                if(this.coupon.couponId == undefined){
+                    couponId = 0
+                }else{
+                    couponId = this.coupon.couponId
+                }
+                // 添加商品数组
+                let arr = []
+                for (let i = 0; i < this.cartInfo.length; i++) {
+                    arr.push(this.cartInfo[i].goodId)
+                }
+                // ajax
+                let userId = this.$store.state.userId
+                let url = '/convenience/api/v1/pay/toPayInit'
+                let formData = new FormData()
+                    formData.append('userId', userId)
+                    formData.append('array', arr)
+                    formData.append('couponId', couponId)
+                axios.post(url,formData).then((response) => {
+                    this.loadingShow = false
+                    let data = response.data
+                    if (typeof WeixinJSBridge == "undefined"){
+                        if( document.addEventListener ){
+                            document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady, false);
+                        }else if (document.attachEvent){
+                            document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady)
+                            document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady)
+                        }
+                    }else{
+                        this.onBridgeReady(data)
+                    }
+                })
+            }
         },
         //调用微信支付页面
         onBridgeReady(data) {
@@ -197,12 +278,35 @@ export default {
                 function (res) {
                     if (res.err_msg == "get_brand_wcpay_request:ok") {
                         _this.$toast.success('支付成功！')
-                        _this.$router.push('/order')
+                        _this.createOrder()
                     }else{     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                         _this.$toast.fail('支付失败！')
                     }
                 }
             )
+        },
+        // 创建订单
+        createOrder(){
+            let userId = this.$store.state.userId
+            let goods= []
+            for(let i in this.cartInfo){
+                goods.push(this.cartInfo[i].goodId)
+            }
+            let url = '/convenience/api/v1/bmsc/order/create'
+            let formData = new FormData()
+                formData.append('couponId', this.coupon.id)
+                formData.append('dispatchPrice', 0)
+                formData.append('addressId', this.payAddress.id)
+                formData.append('payMode', '')
+                formData.append('userId', userId)
+                formData.append('goodIds', goods)
+            axios.post(url,formData).then((response) => {
+                if(response.data.msg == 'OK'){
+                    this.$router.push('/order')
+                }else{
+                    this.$toast.fail('创建订单失败请联系管理员！')
+                }
+            })
         }
     }
 }
@@ -328,6 +432,11 @@ export default {
 .address-box{
     width: 100%;
     height: 100%;
+}
+.coupon-box{
+    width: 100%;
+    height: 100%;
+    background-color: #f3f3f3;
 }
 .van-submit-bar{
     bottom: 0;

@@ -10,11 +10,17 @@
             </div>
         </div>
         <router-view></router-view>
+        <shop-footer></shop-footer>
     </div>
 </template>
 
 <script>
+import shopFooter from '../../components/footer/footer'
+
 export default {
+    components: {
+        'shop-footer': shopFooter
+    },
     data() {
         return {
             showFocus: true,
