@@ -29,7 +29,7 @@
             </div>
         </div>
         <van-popup v-model="show" position="bottom">
-            <set-pwd></set-pwd>
+            <set-pwd @childPay="parentPay"></set-pwd>
         </van-popup>
         <shop-footer></shop-footer>
     </div>
@@ -53,7 +53,8 @@ export default {
             cardList: [],       //会员卡充值价格列表
             focusId: '',        //焦点充值卡ID
             disabled: true,    //submit控制
-            show: true          //设置密码弹窗
+            show: false,          //设置密码弹窗
+            childPay: false     //子组件支付状态
         }
     },
     mounted(){
@@ -70,6 +71,7 @@ export default {
                 this.cardList = response.data.result
                 if(response.data.list[0] == null){
                     this.over = '0'
+                    this.vipStatus = false
                 }else{
                     this.over = response.data.list[0].balance
                     this.vipStatus = true
@@ -78,24 +80,28 @@ export default {
         },
         // 提交数据
         onSubmit(id){
-            let userId = this.$store.state.userId
-            let url = '/convenience/api/v1/pay/toPayInit2'
-            let formData = new FormData()
-                formData.append('userId',userId)
-                formData.append('id', this.focusId)
-            axios.post(url,formData).then((response) => {
-                let data = response.data
-                if (typeof WeixinJSBridge == "undefined"){
-                    if( document.addEventListener ){
-                        document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady, false);
-                    }else if (document.attachEvent){
-                        document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady)
-                        document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady)
+            if(this.vipStatus == false){
+                this.show = true
+            }else{
+                let userId = this.$store.state.userId
+                let url = '/convenience/api/v1/pay/toPayInit2'
+                let formData = new FormData()
+                    formData.append('userId',userId)
+                    formData.append('id', this.focusId)
+                axios.post(url,formData).then((response) => {
+                    let data = response.data
+                    if (typeof WeixinJSBridge == "undefined"){
+                        if( document.addEventListener ){
+                            document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady, false);
+                        }else if (document.attachEvent){
+                            document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady)
+                            document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady)
+                        }
+                    }else{
+                        this.onBridgeReady(data,id)
                     }
-                }else{
-                    this.onBridgeReady(data,id)
-                }
-            })
+                })
+            }
         },
         //调用微信支付页面
         onBridgeReady(data,id) {
@@ -126,14 +132,21 @@ export default {
                 formData.append('id',id)
                 formData.append('userId',userId)
             axios.post(url,formData).then((response) => {
-                console.log(response)
                 if(response.data.status == 200){
                     this.$toast.success('充值成功！')
+                    this.show = false
                     this.getCardList()
                 }else{
                     this.$toast.fail('充值失败！请联系客服')
                 }
             })
+        },
+        // 子组件调用支付
+        parentPay(msg){
+            if(msg == true){
+                this.vipStatus = true
+                this.onSubmit(this.focusId)
+            }
         },
         // 焦点切换
         cardFocus(id){

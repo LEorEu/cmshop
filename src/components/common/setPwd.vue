@@ -17,6 +17,7 @@
                 :value="qrpwd"
                 v-show="onShow2"
                 />
+                <!-- 绑定手机号 -->
                 <van-field
                 v-model="tel"
                 readonly
@@ -37,13 +38,14 @@
             :show="showKeyboard"
             @input="onInput"
             @delete="onDelete"
-            @blur="showKeyboard = false"
             />
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     data() {
         return {
@@ -81,6 +83,9 @@ export default {
             }
         }
     },
+    mounted(){
+
+    },
     methods: {
         // 返回按钮显示
         btnShow(){
@@ -106,12 +111,38 @@ export default {
                     title: '提示',
                     message: `请检查您的手机号${this.tel}无误后点击确认`
                 }).then(() => {
-                    this.$router.push('/vip/successPwd')
+                    this.addTel()
                 }).catch(() => {
                     this.showKeyboard = true    
                     this.focusNum = '3'
                 })
             }
+        },
+        // 添加手机号
+        addTel(){
+            let url = '/convenience/api/v1/bmsc/card/add'
+            let data = {
+                'userId': this.$store.state.userId,
+                'mobilePhone': this.tel
+            }
+            axios.post(url,data).then((response) => {
+                if(response.data.status == 200){
+                    let url = '/convenience/api/v1/bmsc/card/setPassword'
+                    let data = {
+                        'userId': this.$store.state.userId,
+                        'password': this.pwd
+                    }
+                    axios.post(url,data).then((response) => {
+                        if(response.data.status == 200){
+                            this.$emit('childPay',true)
+                        }else{
+                            this.$toast.fail('绑定手机号失败')
+                        }
+                    })
+                }else{
+                    this.$toast.fail('绑定手机号失败')
+                }
+            })
         },
         // 点击键盘
         onInput(key) {

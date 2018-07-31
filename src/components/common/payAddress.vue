@@ -3,18 +3,21 @@
         <h2 class="address-title">地址管理</h2>
         <div class="van-address-list">
             <ul class="van-cell-group van-hairline--top-bottom">
-                <li class="van-cell van-cell--clickable van-hairline" v-for="(item, index) in items" :key="index">
-                    <div class="van-cell__value van-cell__value--alone">
-                        <div class="van-radio">
-                            <div class="van-radio__label">
-                                <div class="van-address-list__name">{{ item.userName }}&nbsp;&nbsp;{{ item.mobilePhone }}</div>
-                                <div class="van-address-list__address">收货地址：{{ item.address }}</div>
+                <van-radio-group v-model="radio" @change="selectAdd()">
+                    <li class="van-cell van-cell--clickable van-hairline" v-for="(item, index) in items" :key="index">
+                        <van-radio :name="item.id">
+                            <div class="van-cell__value van-cell__value--alone">
+                                <div class="van-radio">
+                                    <div class="van-radio__label">
+                                        <div class="van-address-list__name">{{ item.userName }}&nbsp;&nbsp;{{ item.mobilePhone }}</div>
+                                        <div class="van-address-list__address">收货地址：{{ item.address }}</div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <van-tag class="focus" v-if="item.visible == true">默认</van-tag>
-                    <van-icon class="van-address-list__edit" name="edit" @click="showEdit(item)" />
-                </li>
+                        </van-radio>
+                        <van-icon class="van-address-list__edit" name="edit" @click="showEdit(item)" />
+                    </li>
+                </van-radio-group>
             </ul>
         </div>
         <div class="address-add">
@@ -98,6 +101,7 @@ export default {
             editShow: false,    //编辑地址弹窗
             addShow: false,     //新增地址弹窗
             items: '',          //后台地址列表数据
+            radio: '',
             formDataAdd: {
                 userName: '',
                 mobilePhone: '',
@@ -116,13 +120,31 @@ export default {
         this.getAddressList()
     },
     methods:{
+        // 选择地址
+        selectAdd(){
+            let add = ''
+            for(let i in this.items){
+                if(this.items[i].id==this.radio){
+                    add = this.items[i]
+                    break
+                }
+            }
+            this.$emit('addressId',add)
+        },
         // 获取地址列表
         getAddressList(){
+            let userId = this.$store.state.userId
             let url = '/convenience/api/v1/address/list'
             let formData = new FormData()
-            formData.append('userId', '66');
+            formData.append('userId', userId);
             axios.post(url,formData).then((response) => {
                 this.items = response.data.result
+                for(let i in this.items){
+                    if(this.items[i].visible==true){
+                        this.radio = this.items[i].id
+                        break
+                    }
+                }
             })
         },
         // 编辑地址弹窗显示
@@ -133,10 +155,11 @@ export default {
         // 新增地址
         saveAddress(){
             if(this.formDataAdd.userName && this.formDataAdd.mobilePhone && this.formDataAdd.address){
+                let userId = this.$store.state.userId
                 let url = '/convenience/api/v1/address/update'
                 let formData = new FormData()
                 formData.append('id', '')
-                formData.append('userId', '66')
+                formData.append('userId', userId)
                 formData.append('userName', this.formDataAdd.userName)
                 formData.append('mobilePhone', this.formDataAdd.mobilePhone)
                 formData.append('address', this.formDataAdd.address)
@@ -157,10 +180,11 @@ export default {
         // 更新地址
         updateAddress(){
             if(this.formDataEdit.userName && this.formDataEdit.mobilePhone && this.formDataEdit.address){
+                let userId = this.$store.state.userId
                 let url = '/convenience/api/v1/address/update'
                 let formData = new FormData()
                 formData.append('id', this.formDataEdit.id)
-                formData.append('userId', '66')
+                formData.append('userId', userId)
                 formData.append('userName', this.formDataEdit.userName)
                 formData.append('mobilePhone', this.formDataEdit.mobilePhone)
                 formData.append('address', this.formDataEdit.address)
@@ -271,6 +295,9 @@ export default {
         background: #ff8334;
         color: #fff;
     }
+}
+.van-icon-edit{
+    z-index: 999;
 }
 .van-address-list{
     .van-cell{

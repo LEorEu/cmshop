@@ -10,7 +10,7 @@
                 </div>
                 <div class="coupon-main flex">
                     <div class="coupon-text">
-                        <p class="price">{{ item.price }}元优惠券<span class="type">全场通用</span></p>
+                        <p class="price">{{ item.price/100 }}元优惠券<span class="type">全场通用</span></p>
                         <p class="time">使用截止日：{{ item.beginTime.substring(0,10) }}</p>
                     </div>
                     <div class="coupon-receive">

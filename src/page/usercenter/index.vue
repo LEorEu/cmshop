@@ -11,18 +11,18 @@
                     <h3 class="my-name">{{ userInfo.nickName }}</h3>
                     <span class="status-info"></span>
                 </div>
-                <router-link class="my-header-settings" to="/ucenter/setting">
+                <!-- <router-link class="my-header-settings" to="/ucenter/setting">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-shezhi"></use>
                     </svg>
-                </router-link>
+                </router-link> -->
             </div>
             <div class="my-header-features flex">
-                <router-link class="my-header-collection item-features" to="/ucenter/collection">
+                <router-link class="my-header-collection item-features" to="/vip">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-shezhi"></use>
                     </svg>
-                    <p>我的收藏</p>
+                    <p>我的会员</p>
                 </router-link>
                 <router-link class="my-header-coupon item-features" to="/coupon">
                     <svg class="icon" aria-hidden="true">
@@ -65,7 +65,7 @@
 
             <van-cell-group class="my-cate">
                 <van-cell class="my-over my-cate-item" title="我的余额" value="￥0" />
-                <van-cell class="my-vip my-cate-item" title="我的会员" to="/vip" is-link />
+                <!-- <van-cell class="my-vip my-cate-item" title="我的会员" to="/vip" is-link /> -->
                 <van-cell class="my-address my-cate-item" title="地址管理" to="/ucenter/address" is-link />
                 <van-cell class="feedback my-cate-item" title="意见反馈" is-link @click="feedback()" />
                 <van-cell class="about-us my-cate-item" title="关于我们" @click="aboutUs()" />

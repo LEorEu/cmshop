@@ -105,7 +105,7 @@ export default {
         },
         // 倒计时
         daojishi(){
-            let time = 5
+            let time = 60
             let interval = window.setInterval(function() {
                 this.time = `${time}秒重发`
                 this.isDisabled = true
@@ -114,7 +114,7 @@ export default {
                     this.isDisabled = false
                     window.clearInterval(interval)
                 }
-            }.bind(this), 1000);
+            }.bind(this), 1000)
         },
         // 监听数据完整度
         listenStatus(){

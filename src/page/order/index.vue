@@ -61,7 +61,7 @@ export default {
 <style lang="less" scoped>
 .order{
     position: relative;
-    background-color: #f8f8f8;
+    background-color: #f3f3f3;
     .order-header{
         position: fixed;
         top: 0;

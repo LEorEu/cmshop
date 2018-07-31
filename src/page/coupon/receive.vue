@@ -8,7 +8,7 @@
                     <p class="coupon-time">有效期：{{ item.createTime.substring(0,10) }}-{{ item.useTime.substring(0,10) }}</p>
                 </div>
                 <div class="item-right">
-                    <h2 class="coupon-price">{{ item.price }}<span>元</span></h2>
+                    <h2 class="coupon-price">{{ item.price/100 }}<span>元</span></h2>
                     <router-link class="coupon-btn" to="/category">立即使用</router-link>
                 </div>
             </li>

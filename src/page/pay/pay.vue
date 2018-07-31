@@ -1,10 +1,10 @@
 <template>
     <div class="pay">
-        <!-- <div class="pay-address section">
+        <div class="pay-address section">
             <div class="address-null" v-if="payAddressShow">
                 <a class="add-address" @click="addressBox()">+ 添加收货地址</a>
             </div>
-            <div class="address-focus" v-if="!payAddressShow">
+            <div class="address-focus" v-if="!payAddressShow" @click="addressBox()">
                 <div class="location-ring">
                     <van-icon name="location" />
                 </div>
@@ -12,7 +12,7 @@
                 <div class="van-address-list__address">收货地址：{{ payAddress.address }}</div>
                 <van-icon name="arrow" />
             </div>
-        </div> -->
+        </div>
         <div class="pay-order section">
             <div class="section-title">
                 <h2>【订单信息】</h2>
@@ -66,22 +66,27 @@
             button-text="去付款"
             @submit="onSubmit"
         />
-    <van-loading color="black" v-show="loadingShow" />
+        <van-loading color="black" v-show="loadingShow" />
+        <van-popup class="address-box" v-model="addressBoxShow" position="bottom" :overlay="false">
+            <pay-address @addressId="selectAdd"></pay-address>
+        </van-popup>
     </div>
 </template>
 
 <script>
 import axios from 'axios'
 
+import payAddress from '../../components/common/payAddress'
+
 export default {
+    components: {
+        'pay-address': payAddress
+    },
     data(){
         return{
-            payAddress: {
-                userName: '乔布斯',
-                mobilePhone: '18835536886',
-                address: '美国圣地亚哥，阿妹你看 上帝压狗'
-            },             //地址
+            payAddress: '',             //地址
             payAddressShow: false,      //地址状态切换
+            addressBoxShow: false,      //地址弹窗显示
             coupon: '(暂无可用)',       //优惠券
             remark: '',                 //备注
             goodsInfo: '',              //订单信息
@@ -91,6 +96,7 @@ export default {
     },
     mounted(){
         this.initData()
+        this.initAddress()
     },
     computed: {
         // 计算总价
@@ -115,9 +121,39 @@ export default {
                 })
             }
         },
+        // 更新地址信息
+        selectAdd(msg){
+            if(this.payAddress.id == msg.id){
+                this.addressBoxShow = false
+            }else{
+                this.payAddress = msg
+                this.addressBoxShow = false
+            }
+        },
         // 地址显示
+        initAddress(){
+            let userId = this.$store.state.userId
+            let url = '/convenience/api/v1/address/list'
+            let formData = new FormData()
+            formData.append('userId', userId);
+            axios.post(url,formData).then((response) => {
+                if(response.data.result.length == 0){
+                    this.payAddressShow = true
+                }else{
+                    this.payAddressShow = false
+                    this.payAddress = response.data.result
+                    for(let i in this.payAddress){
+                        if(this.payAddress[i].visible==true){
+                            this.payAddress = this.payAddress[i]
+                            break
+                        }
+                    }
+                }
+            })
+        },
+        // 地址弹窗显示
         addressBox(){
-
+            this.addressBoxShow = true
         },
         // 提交数据
         onSubmit(){
@@ -177,8 +213,11 @@ export default {
     background-color: #f3f3f3;
     padding-bottom: 60px;
     .pay-address{
-        padding: 15px 10px;
+        padding: 15px 10px 25px;
         background-color: #fff;
+        background-image: url('../../../static/images/address-bg.png');
+        background-position: bottom;
+        background-repeat: repeat-x;
         .address-null{
             text-align: center;
             .add-address{
@@ -285,6 +324,10 @@ export default {
             margin-bottom: 5px;
         }
     }
+}
+.address-box{
+    width: 100%;
+    height: 100%;
 }
 .van-submit-bar{
     bottom: 0;

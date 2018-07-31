@@ -4,7 +4,7 @@
       <p class="fl-l">【购物车信息】</p>
       <van-icon class="fl-r" name="delete" @click="deleteCart()" />
     </div>
-    <van-checkbox-group class="card-goods" v-model="checkedGoods">
+    <van-checkbox-group class="card-goods" v-model="checkedGoods" :change="checkedStatus()">
       <van-checkbox class="card-goods__item"
         v-for="item in goods"
         :key="item.goodId"
@@ -47,7 +47,6 @@ export default {
   computed: {
     // 购物车计算总价
 		cartTotal(){
-      console.log(this.checkedGoods)
       let total = {
           num: 0,
           price: 0
@@ -66,6 +65,14 @@ export default {
     this.getCartInfo()
   },
   methods: {
+    // 选中状态
+    checkedStatus(){
+      let arr= []
+      for(let i in this.checkedGoods){
+        arr.push(this.checkedGoods[i].goodId)
+      }
+      console.log(arr)
+    },
     // 获取购物车详情
     getCartInfo(){
         let userId = this.$store.state.userId
